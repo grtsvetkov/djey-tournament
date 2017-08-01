@@ -5,7 +5,7 @@ ConModel = {
      * @returns {*}
      */
     setPersonalId: function (_id) {
-        Con.upsert({ _id: _id }, { $set: {con_id: this.connection.id, online: true, type: 'client'} });
+        Con.upsert({ _id: _id }, { $set: {con_id: this.connection.id, online: true} });
     },
 
     setName: function (_id, name) {
@@ -25,6 +25,11 @@ ConModel = {
 
     setCommand: function(_id, command) {
 
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+        
         var flag = Con.find({command: command}).count();
 
         if(flag >= 3 && command > 0) {
@@ -58,6 +63,34 @@ ConModel = {
         var item = list[_.random(0, list.length-1)];
 
         Con.update({_id: item._id}, {$set: {command: command}});
+    },
+
+    setAdmin: function(password) {
+
+        if(ConModel.isAdmin(this.connection.id)) {
+            Env.update({name: 'password'}, { $set: {val: password} });
+            return;
+        }
+
+        var realP = Env.findOne({name: 'password'});
+        
+        if(!realP && !realP.val) {
+            throw new Meteor.Error(7, 'Ошибка авторизации');
+            return;
+        }
+        
+        if(realP.val != password) {
+            throw new Meteor.Error(8, 'Ошибка авторизации');
+            return;
+        }
+        
+        Con.update({con_id: this.connection.id}, { $set: {type: 'Admin'}});
+    },
+    
+    isAdmin: function(_id) {
+        var flag = Con.findOne({con_id: _id});
+
+        return flag && flag.type == 'Admin';
     }
 };
 
@@ -69,7 +102,8 @@ Meteor.methods({
     'con.setName': ConModel.setName,
     'con.unsetName': ConModel.unsetName,
     'con.setCommand': ConModel.setCommand,
-    'con.getRandomTo': ConModel.getRandomTo
+    'con.getRandomTo': ConModel.getRandomTo,
+    'con.setAdmin': ConModel.setAdmin
 });
 
 Meteor.onConnection(function(connection) {

@@ -7,10 +7,18 @@
 
 <body>
     {{>sAlert}}
+    {{>envStatus}}
 </body>
 
 <template name="AppLayout">
-    <div id="logo"><span>Vain Glory турнир от Djey</span></div>
+    <div id="logo">
+        <span>
+            Vain Glory турнир от Djey
+            {{#if is_admin}}
+                <button id="newTour">Новый турнир</button>
+            {{/if}}
+        </span>
+    </div>
     {{>yield}}
     <div id="footer">
         <div><a href="https://vk.com/djeyclub" target="_blank">VK Vainglory с Djey</a></div>
@@ -18,6 +26,14 @@
         <div><a href="https://www.twitch.tv/djey2828" target="_blank">Twitch Djey2828</a></div>
     </div>
     {{>setPlayer}}
+</template>
+
+<template name="envStatus">
+    {{#with status}}
+        <div id="envStatus">
+            {{{.}}}
+        </div>
+    {{/with}}
 </template>
 
 <template name="setPlayer">
@@ -39,7 +55,9 @@
                         <div class="tour">
                             {{#each match in tour}}
                                 <div class="match">
-                                    <button class="draft">D</button>
+                                    {{#if is_admin}}
+                                        <button class="draft">D</button>
+                                    {{/if}}
                                     <div class="inline">
                                         <div class="command">
                                             {{#if match.commands.[0]}}
@@ -108,4 +126,13 @@
 
 <template name="liPlayer">
     <li data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}}</li>
+</template>
+
+<template name="signin">
+    <div id="wrap">
+        <div id="mainBlock" class="row">
+            <input type="password" id="authPassword">
+            <button id="authSend">Auth</button>
+        </div>
+    </div>
 </template>

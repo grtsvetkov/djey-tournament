@@ -3,9 +3,16 @@ const tourCountFromCommandCount = { 2: 1, 4: 3, 8: 4, 16: 5};
 TourModel = {
     newTour: function(commandCount) {
 
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+        
         Con.remove({online: false}); //Удаляем оффлайн
         Con.update({}, {$set : {command: 0}}); //Все онлайн коннекшены в общий пулл
         Tour.remove({}); //Удаляем турнамент
+
+        Env.update({name: 'status'}, { $set: {val: '1'} });
 
         commandCount = 8; //Колличестко комманд участников
 
@@ -47,6 +54,11 @@ TourModel = {
 
     setWin: function(ds) {
 
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+        
         var data = {};
 
         _.each(ds, function(i, k){
@@ -67,17 +79,23 @@ TourModel = {
 
         var match = Tour.findOne({tour: data.tour + 1, match: nextMatch});
 
-        if(!match) {
-            throw new Meteor.Error(5, 'Ошибка выбора победителя');
-            return;
-        }
+        if(countNextMatch >= 1) {
 
-        if(match.commands.length >= 2) {
-            throw new Meteor.Error(6, 'Ошибка выбора победителя');
-            return;
-        }
+            if (!match) {
+                throw new Meteor.Error(5, 'Ошибка выбора победителя');
+                return;
+            }
 
-        Tour.update({_id: match._id}, { $push: { commands: data.win}});
+            if (match.commands.length >= 2) {
+                throw new Meteor.Error(6, 'Ошибка выбора победителя');
+                return;
+            }
+
+            Tour.update({_id: match._id}, { $push: { commands: data.win}});
+
+        } else {
+            Env.update({name: 'status'}, { $set: {val: 'Команда №'+data.win} });
+        }
 
         Tour.update({tour: data.tour, match: data.match}, { $set: {status: 1} });
     }

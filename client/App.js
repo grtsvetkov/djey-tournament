@@ -1,7 +1,50 @@
 Template.AppLayout.events({
+
+    'click #newTour': function(e) {
+        e.preventDefault();
+        var diag = $('<div id="myDialog" title="Внимание!"><span id="dialogMsg">Уверены, что хотите создать новый турнир?</span></div>');
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Да, создать новый турнир': function () {
+                    Meteor.call('tour.newTour', function (err) {
+                        if (err) {
+                            console.log(err);
+                            sAlert.error(err.reason);
+                        }
+                        diag.dialog('close');
+                        diag.remove();
+                    });
+                },
+                'Отмена': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+
+        return false;
+    },
+
     'click #logo': function () {
         var win = window.open('https://www.twitch.tv/djey2828', '_blank');
         win.focus();
+    }
+});
+
+Template.envStatus.helpers({
+    'status': function() {
+        var val = Env.findOne({name: 'status'});
+
+        if(val) {
+            if (val.val == '1') {
+                return;
+            } else {
+                return 'Турнир окончен.<br>' + val.val;
+            }
+        }
     }
 });
 
@@ -43,27 +86,25 @@ Template.liPlayer.rendered = function () {
 };
 
 Template.index.rendered = function () {
-    $('#conList ul, .commandItem ul').sortable({
-        connectWith: ".connectedSortable",
-        stop: function (e, ui) {
-            Meteor.call('con.setCommand', ui.item.data('id'), ui.item.parent().data('key'), function (err) {
-                if (err) {
-                    console.log(err);
-                    sAlert.error(err.reason);
-                    Meteor.setTimeout(function () {
-                        document.location.reload(true);
-                    });
-                }
-            });
-        }
-    }).disableSelection();
+    if(isAdmin()) {
+        $('#conList ul, .commandItem ul').sortable({
+            connectWith: ".connectedSortable",
+            stop: function (e, ui) {
+                Meteor.call('con.setCommand', ui.item.data('id'), ui.item.parent().data('key'), function (err) {
+                    if (err) {
+                        console.log(err);
+                        sAlert.error(err.reason);
+                        Meteor.setTimeout(function () {
+                            document.location.reload(true);
+                        });
+                    }
+                });
+            }
+        }).disableSelection();
+    }
 };
 
 Template.index.helpers({
-
-    'is_admin': function () {
-        return true;
-    },
 
     'tour_list': function () {
         var tour = {};
@@ -95,7 +136,6 @@ Template.index.helpers({
 
     'command_status': function (num) {
         return Con.find({
-            type: 'client',
             name: {$exists: true},
             command: num,
             online: true
@@ -103,7 +143,7 @@ Template.index.helpers({
     },
 
     'con_list': function () {
-        return Con.find({type: 'client', name: {$exists: true}, command: {$eq: 0}}, {sort: {online: -1}}).fetch();
+        return Con.find({name: {$exists: true}, command: {$eq: 0}}, {sort: {online: -1}}).fetch();
     },
 
     'command_list': function () {
@@ -111,18 +151,18 @@ Template.index.helpers({
     },
 
     'command_player': function (num) {
-        return Con.find({type: 'client', name: {$exists: true}, command: num}, {sort: {online: -1}}).fetch();
+        return Con.find({name: {$exists: true}, command: num}, {sort: {online: -1}}).fetch();
     },
 
     'stats': function () {
         return {
-            all: Con.find({type: 'client', online: true}).count(),
-            player: Con.find({type: 'client', name: {$exists: true}}).count()
+            all: Con.find({online: true}).count(),
+            player: Con.find({name: {$exists: true}}).count()
         }
     },
 
     'is_player': function () {
-        return Con.findOne({type: 'client', _id: localStorage.getItem('myPersonalId'), name: {$exists: true}});
+        return Con.findOne({_id: localStorage.getItem('myPersonalId'), name: {$exists: true}});
     }
 });
 
@@ -231,4 +271,17 @@ Template.index.events({
         diag.dialog('open');
     }
 
+});
+
+Template.signin.events({
+    'click #authSend': function() {
+        Meteor.call('con.setAdmin', $('#authPassword').val(), function(err){
+            if(err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            } else {
+                Router.go('/');
+            }
+        })
+    }
 });
