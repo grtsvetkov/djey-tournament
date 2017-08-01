@@ -136,7 +136,10 @@
         <ul id="commandList" class="row">
             {{#each command_list}}
                 <li class="commandItem connectedSortable">
-                    <p class="addRondomTo" data-key="{{.}}">{{com_name .}}<span class="edit">&#9998;</span></p>
+                    <p class="addRondomTo" data-key="{{.}}">
+                        {{com_name .}}
+                        {{#if is_admin}}<span class="edit">&#9998;</span>{{/if}}
+                    </p>
                     <ul data-key="{{.}}" id="commandItem{{.}}" class="connectedSortable">
                         {{#each command_player .}}
                             {{>liPlayer}}
