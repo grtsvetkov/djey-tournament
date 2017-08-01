@@ -59,7 +59,7 @@ ConModel = {
             return;
         }
 
-        var list = Con.find({type: 'client', name: {$exists: true}, command: { $eq: 0}, online: true }).fetch();
+        var list = Con.find({name: {$exists: true}, command: { $eq: 0}, online: true }).fetch();
 
         if(!list || list.length == 0) {
             throw new Meteor.Error(3, 'В пуле нет участников онлайн');
