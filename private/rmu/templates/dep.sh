@@ -60,4 +60,4 @@ echo "Checking is app booted or not?"
 curl localhost:${PORT} || echo "DEPLOYMENT FAIL"
 
 # chown to support dumping heapdump and etc
-sudo chown -R meteoruser app
+#sudo chown -R meteoruser app

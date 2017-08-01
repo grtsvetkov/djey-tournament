@@ -198,6 +198,11 @@ Template.index.events({
     },
 
     'click .addRondomTo': function (e) {
+
+        if(!isAdmin()) {
+            return;
+        }
+
         var key = e.currentTarget.dataset.key;
         var diag = $('<div id="myDialog" title="Внимание!"><span id="dialogMsg">Добавить рандомного игрока в комманду №' + key + '</span></div>');
         diag.dialog({

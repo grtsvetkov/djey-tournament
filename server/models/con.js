@@ -46,6 +46,12 @@ ConModel = {
 
 
     getRandomTo: function(command) {
+
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+       
         var flag = Con.find({command: command}).count();
 
         if(flag >= 3 && command > 0) {
