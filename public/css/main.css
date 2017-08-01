@@ -106,18 +106,26 @@ button:hover {
     padding-top: 30px;
 }
 
-#wrap {
+#globalWrap {
     display: block;
-    width: 97%;
-    min-height: 97%;
+    width: 100%;
+    min-height: 100%;
     margin-top: 0px;
     margin-left: auto;
     margin-right: auto;
     position: relative;
 }
 
-#wrap .content {
-    padding-bottom: 70px;
+#globalWrap .content {
+    padding-bottom: 90px;
+}
+
+#wrap {
+    display: block;
+    width: 98%;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #footer {
@@ -172,6 +180,7 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.4);
     vertical-align: middle;
     text-align: center;
+    border-radius: 7px;
 }
 
 #commandTable .wrap {
@@ -233,6 +242,7 @@ button:hover {
 }
 
 #conList {
+    border-radius: 7px;
     position:relative;
     display: inline-block;
     width: 250px;
@@ -264,6 +274,9 @@ button:hover {
 
 #commandList {
     text-align: left;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
 }
 
 li.commandItem {
@@ -274,8 +287,6 @@ li.commandItem {
     height: 150px;
     text-align: center;
     line-height: normal;
-    margin-left: 1%;
-    margin-right: 1%;
     vertical-align: top;
     margin-top: 30px;
 }
@@ -333,7 +344,7 @@ li.commandItem p {
     cursor: pointer;
     display: block;
     top: 40px;
-    left: 70px;
+    left: 1%;
     width: 150px;
     height: 150px;
     background-image: url('images/logo.png');

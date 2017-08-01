@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title>Djey турниры</title>
+    <title>Djey</title>
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/jquery-ui-1.9.2.custom.min.css">
     <link rel="icon" sizes="64x64" href="favico.ico?v=3">
@@ -12,15 +12,25 @@
 </body>
 
 <template name="AppLayout">
-    <div id="logo">
-        <span>
-            Vain Glory турнир от Djey
-            {{#if is_admin}}
-                <button id="newTour">Новый турнир</button>
-            {{/if}}
-        </span>
+    <div id="globalWrap">
+        <div class="content">
+            <div id="logo">
+                <span>
+                    Vain Glory турнир от Djey
+                    {{#if is_admin}}
+                        <button id="newTour">Новый турнир</button>
+                    {{/if}}
+                </span>
+            </div>
+            {{>yield}}
+        </div>
+        <div id="footer">
+            <div><a href="https://vk.com/djeyclub" target="_blank">VK Vainglory с Djey</a></div>
+            <div><a href="http://www.youtube.com/c/djeyTV" target="_blank">Youtube DjeyTV</a></div>
+            <div><a href="https://www.twitch.tv/djey2828" target="_blank">Twitch Djey2828</a></div>
+            <div><a href="https://goodgame.ru/channel/djey2828" target="_blank">GoodGame Djey2828</a></div>
+        </div>
     </div>
-    {{>yield}}
     {{>setPlayer}}
 </template>
 
@@ -44,7 +54,6 @@
 
 <template name="index">
     <div id="wrap">
-        <div class="content">
             <div id="mainBlock" class="row">
                 <div id="commandTable">
                     <div class="wrap">
@@ -130,13 +139,6 @@
                     </li>
                 {{/each}}
             </ul>
-        </div>
-        <div id="footer">
-            <div><a href="https://vk.com/djeyclub" target="_blank">VK Vainglory с Djey</a></div>
-            <div><a href="http://www.youtube.com/c/djeyTV" target="_blank">Youtube DjeyTV</a></div>
-            <div><a href="https://www.twitch.tv/djey2828" target="_blank">Twitch Djey2828</a></div>
-            <div><a href="https://goodgame.ru/channel/djey2828" target="_blank">GoodGame Djey2828</a></div>
-        </div>
     </div>
 </template>
 
