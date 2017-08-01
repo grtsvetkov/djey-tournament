@@ -1,3 +1,7 @@
-Template.registerHelper('niceNum', function (n) {
-    return n+1;
+Template.registerHelper('eq', function (op1, op2) {
+    return op1 == op2;
+});
+
+Template.registerHelper('consoleLog', function (obj) {
+    console.log(obj);
 });

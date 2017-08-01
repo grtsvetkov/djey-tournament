@@ -19,6 +19,10 @@ ConModel = {
         Con.update({_id: _id}, {$set: {name: name, command: 0}});
     },
 
+    unsetName: function (_id) {
+        Con.update({_id: _id, con_id: this.connection.id}, {$set: {name: '', command: null}});
+    },
+
     setCommand: function(_id, command) {
 
         var flag = Con.find({command: command}).count();
@@ -63,6 +67,7 @@ ConModel = {
 Meteor.methods({
     'con.setPersonalId': ConModel.setPersonalId,
     'con.setName': ConModel.setName,
+    'con.unsetName': ConModel.unsetName,
     'con.setCommand': ConModel.setCommand,
     'con.getRandomTo': ConModel.getRandomTo
 });
