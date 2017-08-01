@@ -34,7 +34,6 @@ li {
     font-size: 20px;
     line-height: 25px;
     cursor: default;
-    b1order-top: 1px solid #d9daa8;
     border-bottom: 1px solid #d9daa8;
     b1ackground: #d3dacc;
     z-index: 3;
@@ -205,6 +204,8 @@ li.commandItem p {
     background-color: rgba(0, 0, 0, 0.8);
     color: rgba(255, 218, 214, 0.7);
     padding: 5px;
+    font-size: 17px;
+    text-align: center;
     margin: 0;
 }
 
