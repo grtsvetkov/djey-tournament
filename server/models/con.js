@@ -54,7 +54,7 @@ ConModel = {
        
         var flag = Con.find({command: command}).count();
 
-        if(flag >= 3 && command > 0) {
+        if(flag > 3 && command > 0) {
             throw new Meteor.Error(2, 'В команде может быть не больше трёх игроков');
             return;
         }
