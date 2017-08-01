@@ -7,6 +7,10 @@ Meteor.publish('tour', function() {
     return Tour.find({});
 });
 
+Meteor.publish('com', function() {
+    return Com.find({});
+});
+
 Meteor.publish('env', function() {
     return Env.find({name: {$ne: 'password'}});
 });

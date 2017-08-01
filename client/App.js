@@ -1,14 +1,26 @@
+Template.AppLayout.helpers({
+    'name': function() {
+        var val = Env.findOne({name: 'name'});
+
+        return val && val.name ? val.val : null;
+    }
+});
+
 Template.AppLayout.events({
 
     'click #newTour': function(e) {
         e.preventDefault();
-        var diag = $('<div id="myDialog" title="Внимание!"><span id="dialogMsg">Уверены, что хотите создать новый турнир?</span></div>');
+        var diag = $(`
+            <div id="myDialog" title="Внимание!">
+                <span id="dialogMsg">Уверены, что хотите создать новый турнир?</span>
+                <p><input id="newTourName" style="width: 100%" type="text" value="Vain Glory турнир от Djey"></p>
+            </div>`);
         diag.dialog({
             autoOpen: false,
             modal: true,
             buttons: {
                 'Да, создать новый турнир': function () {
-                    Meteor.call('tour.newTour', function (err) {
+                    Meteor.call('tour.newTour', $('#newTourName').val(), function (err) {
                         if (err) {
                             console.log(err);
                             sAlert.error(err.reason);
@@ -39,10 +51,10 @@ Template.envStatus.helpers({
         var val = Env.findOne({name: 'status'});
 
         if(val) {
-            if (val.val == '1') {
+            if (val.val == '0') {
                 return;
             } else {
-                return 'Турнир окончен.<br>' + val.val;
+                return 'Турнир окончен.<br> Победа за <strong>' + comName(val.val) + '</strong>!';
             }
         }
     }
@@ -197,6 +209,40 @@ Template.index.events({
         diag.dialog('open');
     },
 
+    'click .addRondomTo .edit': function(e) {
+        e.preventDefault();
+
+        var key = $(e.currentTarget).parent().data('key');
+
+        var diag = $(`
+            <div id="myDialog" title="Переименовать команду">
+                <p><input id="newCommandName" style="width: 100%" type="text" value="`+comName(key)+`"></p>
+            </div>`);
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Переименовать': function () {
+                    Meteor.call('tour.renameCommand', key, $('#newCommandName').val(), function (err) {
+                        if (err) {
+                            console.log(err);
+                            sAlert.error(err.reason);
+                        }
+                        diag.dialog('close');
+                        diag.remove();
+                    });
+                },
+                'Отмена': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+
+        return false;
+    },
+
     'click .addRondomTo': function (e) {
 
         if(!isAdmin()) {
@@ -204,7 +250,7 @@ Template.index.events({
         }
 
         var key = e.currentTarget.dataset.key;
-        var diag = $('<div id="myDialog" title="Внимание!"><span id="dialogMsg">Добавить рандомного игрока в комманду №' + key + '</span></div>');
+        var diag = $('<div id="myDialog" title="Внимание!"><span id="dialogMsg">Добавить рандомного игрока в "' + comName(key) + '"?</span></div>');
         diag.dialog({
             autoOpen: false,
             modal: true,
@@ -241,12 +287,12 @@ Template.index.events({
         }
 
         var commandWin = ds.win;
-        var winButton = 'Победила команда №' + commandWin;
+        var winButton = 'Победа за "' + comName(commandWin)+'"';
 
         var commandLose = commands[0] == commandWin ? commands[1] : commands[0];
 
         var msg = 'В туре <strong>' + ds.tour + '</strong>, матче <strong>' + ds.match + '</strong>';
-        msg += '<br><br>команда <strong>' + commandWin + '</strong> победила команду <strong>' + commandLose + '</strong>?';
+        msg += '<br><br>команда "<strong>' + comName(commandWin) + '</strong>" победила команду "<strong>' + comName(commandLose) + '</strong>"?';
 
         var buttons = {};
 

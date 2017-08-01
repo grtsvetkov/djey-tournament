@@ -1,18 +1,23 @@
 const tourCountFromCommandCount = { 2: 1, 4: 3, 8: 4, 16: 5};
 
 TourModel = {
-    newTour: function(commandCount) {
+    newTour: function(name, commandCount) {
 
         if(!ConModel.isAdmin(this.connection.id)) {
             throw new Meteor.Error(9, 'Ошибка авторизации');
             return;
         }
-        
+
+        Com.remove({}); //Удаляем название команда
         Con.remove({online: false}); //Удаляем оффлайн
         Con.update({}, {$set : {command: 0}}); //Все онлайн коннекшены в общий пулл
         Tour.remove({}); //Удаляем турнамент
 
-        Env.update({name: 'status'}, { $set: {val: '1'} });
+        Env.update({name: 'status'}, { $set: {val: '0'} });
+
+        if(name) {
+            Env.update({name: 'name'}, {$set: {val: name}});
+        }
 
         commandCount = 8; //Колличестко комманд участников
 
@@ -21,6 +26,7 @@ TourModel = {
         var commandPull = []; //Пулл комманд
 
         for(var x = 1; x <= commandCount; x++) { //Заполняем пулл комманд
+            Com.insert({num: x, name: 'Команда №'+x});
             commandPull.push(x);
         }
 
@@ -94,14 +100,25 @@ TourModel = {
             Tour.update({_id: match._id}, { $push: { commands: data.win}});
 
         } else {
-            Env.update({name: 'status'}, { $set: {val: 'Команда №'+data.win} });
+            Env.update({name: 'status'}, { $set: {val: String(data.win)} });
         }
 
         Tour.update({tour: data.tour, match: data.match}, { $set: {status: 1} });
+    },
+
+    renameCommand: function(num, name) {
+
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+
+        Com.update({num: parseInt(num)}, { $set: {name: name} });
     }
 };
 
 Meteor.methods({
     'tour.newTour': TourModel.newTour,
-    'tour.setWin': TourModel.setWin
+    'tour.setWin': TourModel.setWin,
+    'tour.renameCommand': TourModel.renameCommand
 });

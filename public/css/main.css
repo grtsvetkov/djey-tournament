@@ -1,20 +1,16 @@
+body, html, ul, div {
+    margin: 0;
+    padding: 0;
+}
+
 body, html {
     width: 100%;
     height: 100%;
     opacity: 1;
     visibility: visible;
-    margin: 0;
-    padding: 0;
-    background-color:#000000;
-    background-image: url('images/background.png');
-    background-repeat: no-repeat, no-repeat;
+    background: url('images/background.png') no-repeat, no-repeat #000000;
     min-width: 1000px;
     font-family: SANS-SERIF;
-}
-
-ul, div {
-    margin: 0;
-    padding: 0;
 }
 
 ul {
@@ -37,7 +33,6 @@ li {
     cursor: default;
     border-bottom: 1px solid #d9daa8;
     b1ackground: #d3dacc;
-    z-index: 3;
 }
 
 li.moved {
@@ -93,22 +88,23 @@ button:hover {
 
 #envStatus {
     position: absolute;
-    z-index: 5;
-    top: 137px;
-    width: 24%;
+    z-index: 1;
+    top: 150px;
+    width: 40%;
     min-width: 240px;
-    height: 80px;
-    margin-left: 38%;
-    background: rgba(0, 0, 0, 1);
+    height: 490px;
+    margin-left: 30%;
+    background: url(images/cup.png) no-repeat no-repeat center 70px #000000;
     color: #ffffff;
-    font-size: 30px;
+    font-size: 25px;
     text-align: center;
     padding-top: 30px;
+    box-shadow: 0 0 50px 40px rgba(0,0,0,1);
 }
 
 #globalWrap {
     display: block;
-    width: 100%;
+    width: 98%;
     min-height: 100%;
     margin-top: 0px;
     margin-left: auto;
@@ -120,12 +116,26 @@ button:hover {
     padding-bottom: 90px;
 }
 
-#wrap {
+#logo {
+    cursor: pointer;
     display: block;
-    width: 98%;
-    margin-top: 0px;
-    margin-left: auto;
-    margin-right: auto;
+    top: 40px;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background-image: url('images/logo.png');
+    background-size: 100%;
+}
+
+#logo span {
+    color: #FFFFFF;
+    position: relative;
+    width: 300px;
+    display: inline-block;
+    padding-top: 50px;
+    padding-left: 150px;
+    font-size: 23px;
+    font-weight: 600;
 }
 
 #footer {
@@ -136,6 +146,7 @@ button:hover {
     height: 80px;
     padding: 0;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 7px 7px 0 0;
 }
 
 #footer div{
@@ -226,6 +237,11 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 7px;
     font-size: 14px;
+
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
 }
 
 #commandTable .tour .match .command span {
@@ -269,7 +285,6 @@ button:hover {
 #statInfo {
     position: absolute;
     bottom: 0;
-    z-index: 2;
 }
 
 #commandList {
@@ -277,6 +292,7 @@ button:hover {
     display: -webkit-flex; /* Safari */
     display: flex;
     justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
 }
 
 li.commandItem {
@@ -304,6 +320,17 @@ li.commandItem p {
     font-size: 17px;
     text-align: center;
     margin: 0;
+    position: relative;
+}
+
+li.commandItem p span.edit {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    color: rgba(255, 218, 214, 0.7);
+    cursor: pointer;
+    width: 17px;
+    height: 17px;
 }
 
 .no-close .ui-dialog-titlebar-close {
@@ -338,28 +365,6 @@ li.commandItem p {
     vertical-align: top;
     margin-left: auto;
     margin-right: auto;
-}
-
-#logo {
-    cursor: pointer;
-    display: block;
-    top: 40px;
-    left: 1%;
-    width: 150px;
-    height: 150px;
-    background-image: url('images/logo.png');
-    background-size: 100%;
-}
-
-#logo span {
-    color: #FFFFFF;
-    position: relative;
-    width: 400px;
-    display: inline-block;
-    padding-top: 50px;
-    padding-left: 150px;
-    font-size: 23px;
-    font-weight: 600;
 }
 
 #block-info {
