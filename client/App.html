@@ -1,0 +1,100 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Djey турниры</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/jquery-ui-1.9.2.custom.min.css">
+</head>
+
+<body>
+    {{>sAlert}}
+</body>
+
+<template name="AppLayout">
+    {{>yield}}
+    {{>setPlayer}}
+</template>
+
+<template name="setPlayer">
+    <div class="ui-helper-hidden" id="setPlayer-dialog" title="Принять участие">
+        <br>
+        <label for="name">Ник в игре Vain Glory</label>
+        <br><br>
+        <input type="text" id="setPlayer-name" value="" class="text ui-widget-content ui-corner-all">
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </div>
+</template>
+
+<template name="index">
+    <div id="wrap">
+        <div id="mainBlock" class="row">
+            <div id="commandTable">
+                <div class="tour">
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                </div>
+                <div class="tour">
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                </div>
+                <div class="tour">
+                    <div class="match">
+                        <div class="command"></div>
+                        <div class="command"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="conList">
+                {{#unless is_player}}
+                    <button id="setPlayer">Принять участие</button>
+                {{/unless}}
+                <ul data-key="0" class="connectedSortable">
+                    {{#each con_list}}
+                        {{>liPlayer}}
+                    {{/each}}
+                </ul>
+                {{#with stats}}
+                    <div id="statInfo">
+                        <p>Онлайн пользователей: {{all}}</p>
+                        <p>Участников: {{player}}</p>
+                    </div>
+                {{/with}}
+            </div>
+        </div>
+        <ul id="commandList" class="row">
+            {{#each command_list}}
+                <li class="commandItem connectedSortable">
+                    <p class="addRondomTo" data-key="{{.}}">Команда №{{.}}</p>
+                    <ul data-key="{{.}}" id="commandItem{{.}}" class="connectedSortable">
+                        {{#each command_player .}}
+                            {{>liPlayer}}
+                        {{/each}}
+                    </ul>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="liPlayer">
+    <li data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}}</li>
+</template>

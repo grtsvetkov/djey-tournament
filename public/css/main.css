@@ -1,0 +1,404 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color:#000000;
+    opacity: 1;
+    visibility: visible;
+    margin: 0;
+    padding: 0;
+    background-image: url('images/background.png');
+    background-repeat: no-repeat;
+    min-width: 1200px;
+}
+
+ul, div {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+    color: #000000;
+    font-size: 20px;
+    line-height: normal;
+}
+
+li {
+    overflow: hidden;
+    width: 250px;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-weight: 400;
+    color: #000000;
+    font-size: 20px;
+    line-height: 25px;
+    cursor: default;
+    b1order-top: 1px solid #d9daa8;
+    border-bottom: 1px solid #d9daa8;
+    b1ackground: #d3dacc;
+    z-index: 3;
+}
+
+li.moved {
+    animation: 0.6s moved;
+}
+
+@keyframes moved {
+    0% {
+        border-top: 1px solid #d9daa8;
+        border-bottom: 1px solid #d9daa8;
+        background: #d3dacc;
+        box-shadow: none;
+    }
+    30% {
+        box-shadow: 0 0 7px 7px rgba(255, 76, 81, 1);
+    }
+    50% { }
+    100% {
+        border-top: rgba(255, 76, 81, 1);
+        border-bottom: rgba(255, 76, 81, 1);
+        background: rgba(255, 76, 81, 1);
+
+        box-shadow: 0 0 7px 7px rgba(255, 76, 81, 1);
+    }
+}
+
+p {
+    padding-left: 10px;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 25px;
+    border: 2px solid #dddddd;
+    background: #000000;
+    color: #ffffff;
+    font-size: 17px;
+}
+
+a {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+button:hover {
+    border: 2px solid #dd7d70;
+    color: #dd7d70;
+}
+
+
+#wrap {
+    display: block;
+    width: 90%;
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.online {
+    width: 10px;
+    height: 10px;
+    background-color: #00FF00;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.online.offline {
+    background-color: #FF0000;
+}
+
+.row {
+    display: block;
+    clear: both;
+}
+
+#mainBlock {
+    height: 400px;
+}
+
+#commandTable {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    float: left;
+    height: 400px;
+    margin-right: -300px;
+    background-color: rgba(255, 255, 255, 0.4);
+    vertical-align: middle;
+}
+
+#commandTable .tour {
+    max-width: 29%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#commandTable .tour .match {
+    margin: 25px;
+}
+
+#commandTable .tour .match .command{
+    width: 200px;
+    min-height: 30px;
+    margin: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#conList {
+    position:relative;
+    display: inline-block;
+    width: 250px;
+    height: 400px;
+    float: right;
+    margin: 0;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+#conList ul {
+    min-height: 350px;
+}
+
+#setPlayer {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+}
+
+#statInfo {
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+}
+
+#commandList {
+    text-align: left;
+}
+
+li.commandItem {
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: inline-block;
+    width: 10%;
+    height: 150px;
+    text-align: center;
+    line-height: normal;
+    margin-left: 1%;
+    margin-right: 1%;
+    vertical-align: top;
+    margin-top: 30px;
+}
+
+li.commandItem ul {
+    height: 150px;
+    margin-top: 10px;
+}
+
+li.commandItem p {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 218, 214, 0.7);
+    padding: 5px;
+    margin: 0;
+}
+
+.no-close .ui-dialog-titlebar-close {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#wrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#wrapper div {
+    vertical-align: top;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#logo {
+    cursor: pointer;
+    display: block;
+    top: 40px;
+    left: 40px;
+    width: 150px;
+    height: 150px;
+    background-image: url('logo.png');
+    background-size: 100%;
+}
+
+#logo span {
+    position: relative;
+    width: 400px;
+    display: inline-block;
+    padding-top: 50px;
+    padding-left: 150px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#block-info {
+    display: block;
+    width: 90%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#block-info div {
+    display: inline-block;
+}
+
+#block-info #block-auth {
+    width: 30%;
+}
+
+#block-info #block-log {
+    width: 60%;
+    height: 100px;
+    overflow-y: scroll;
+
+}
+
+#block-admin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#block-admin div{
+    vertical-align: top;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+    text-align: center;
+}
+
+#block-admin .createDraft {
+    width: 59%;
+    padding: 0;
+    margin:0;
+}
+
+.block-action {
+    display:inline-block;
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.block-action.teamA div{
+    border: 1px solid #63D1F4;
+}
+
+.block-action.teamA div.active{
+    background-color: rgba(99,209,244, 0.5);
+}
+
+.block-action.teamB div{
+    border: 1px solid #FBA16C;
+}
+
+.block-action.teamB div.active{
+    background-color: rgba(251,161,108, 0.5);
+}
+
+.block-action div{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    background-image: url("glory.png");
+    background-size: 100%;
+}
+
+.block-action .ban{
+    width: 100px;
+    height: 100px;
+}
+
+.block-action .pick{
+    width: 150px;
+    height: 150px;
+}
+
+#heroesIcons {
+    display:inline-block;
+    width: 59%;
+    padding: 0;
+    margin:0;
+}
+
+#heroesIcons div {
+    display:inline-block;
+    background-size: 100%;
+    margin: auto;
+    cursor: pointer;
+    width: 130px;
+    height: 130px;
+}
+
+#heroesIcons div:hover {
+    opacity: 0.75;
+}
+
+#heroesIcons div.checked {
+    animation: 0.6s wave;
+    opacity: 0.3;
+}
+
+@keyframes wave {
+    0% {
+        box-shadow: none;
+    }
+    30% {
+        box-shadow: 0 0 20px 20px rgba(255,255,255,1);
+    }
+    50% {
+
+    }
+    100% {
+        opacity: 0.3;
+        box-shadow: 0 0 20px 20px rgba(255,255,255,1);
+    }
+}
+
+
+#footer {
+    margin-top: 25px;
+    padding-top: 25px;
+    padding-bottom: 20px;
+    border-top: 1px solid gray;
+    display: block;
+}
+
+#footer div{
+    display: inline-block;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
