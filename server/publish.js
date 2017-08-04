@@ -1,6 +1,6 @@
 
 Meteor.publish('con', function() {
-    return Con.find({}, {fields: { _id: 1, name: 1, online: 1, type: 1, command: 1 }});
+    return Con.find({}, {fields: { _id: 1, name: 1, online: 1, type: 1, command: 1, vg_level: 1, vg_id: 1, error: 1 }});
 });
 
 Meteor.publish('tour', function() {

@@ -269,8 +269,9 @@ button:hover {
 }
 
 #conList ul {
-    min-height: 350px;
-    padding-left: 4px
+    padding-left: 4px;
+    overflow: scroll;
+    height: 275px;
 }
 
 #setPlayer, #unsetPlayer {

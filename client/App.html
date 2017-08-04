@@ -19,7 +19,7 @@
                     {{#with name}}
                         {{.}}
                     {{else}}
-                        Vain Glory турнир от Djey
+                        VainGlory турнир от Djey
                     {{/with}}
                     {{#if is_admin}}
                         <button id="newTour">Новый турнир</button>
@@ -49,7 +49,7 @@
 <template name="setPlayer">
     <div class="ui-helper-hidden" id="setPlayer-dialog" title="Принять участие">
         <br>
-        <label for="name">Ник в игре Vain Glory</label>
+        <label for="name">Ник в игре VainGlory</label>
         <br><br>
         <input type="text" id="setPlayer-name" value="" class="text ui-widget-content ui-corner-all">
         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
@@ -57,6 +57,7 @@
 </template>
 
 <template name="index">
+    {{error}}
     <div id="wrap">
         <div id="mainBlock" class="row">
             <div id="commandTable">
@@ -121,9 +122,7 @@
                     <button id="setPlayer">Принять участие</button>
                 {{/if}}
                 <ul data-key="0" class="connectedSortable">
-                    {{#each con_list}}
-                        {{>liPlayer}}
-                    {{/each}}
+                    {{#each con_list}}{{>liPlayer}}{{/each}}
                 </ul>
                 {{#with stats}}
                     <div id="statInfo">

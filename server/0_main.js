@@ -14,6 +14,6 @@ Meteor.startup(function(){
     var flag = Env.findOne({name: 'name'});
 
     if(!flag) {
-        Env.insert({name: 'name', val: 'Vain Glory турнир от Djey'});
+        Env.insert({name: 'name', val: 'VainGlory турнир от Djey'});
     }
 });

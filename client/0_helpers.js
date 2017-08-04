@@ -3,7 +3,10 @@ isAdmin = function() {
 };
 
 comName = function(n) {
-    return Com.findOne({num: parseInt(n)}).name;
+
+    var com = Com.findOne({num: parseInt(n)});
+
+    return com && com.name ? com.name : '';
 };
 
 Template.registerHelper('is_admin', function () {

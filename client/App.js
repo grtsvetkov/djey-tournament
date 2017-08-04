@@ -13,7 +13,7 @@ Template.AppLayout.events({
         var diag = $(`
             <div id="myDialog" title="Внимание!">
                 <span id="dialogMsg">Уверены, что хотите создать новый турнир?</span>
-                <p><input id="newTourName" style="width: 100%" type="text" value="Vain Glory турнир от Djey"></p>
+                <p><input id="newTourName" style="width: 100%" type="text" value="VainGlory турнир от Djey"></p>
             </div>`);
         diag.dialog({
             autoOpen: false,
@@ -77,13 +77,14 @@ Template.setPlayer.rendered = function () {
                     sAlert.error('Введите игровой ник');
                     return;
                 } else {
-                    Meteor.call('con.setName', localStorage.getItem('myPersonalId'), name, function (err) {
+                    Meteor.call('con.setName', localStorage.getItem('myPersonalId'),  name, function (err) {
                         if (err) {
                             console.log(err);
                             sAlert.error(err.reason);
                         }
-                        setPlayer_dialog.dialog('close');
                     });
+
+                    setPlayer_dialog.dialog('close');
                 }
             },
             'Отмена': function () {
@@ -118,6 +119,17 @@ Template.index.rendered = function () {
 
 Template.index.helpers({
 
+    'error': function() {
+        var p = Con.findOne({_id: localStorage.getItem('myPersonalId')});
+
+        console.log(p);
+
+        if(p && p.error) {
+            sAlert.error(p.error);
+            Meteor.call('con.readError', localStorage.getItem('myPersonalId'));
+        }
+    },
+    
     'tour_list': function () {
         var tour = {};
 
@@ -191,14 +203,16 @@ Template.index.events({
             modal: true,
             buttons: {
                 'Да, хочу отказаться': function () {
+
                     Meteor.call('con.unsetName', localStorage.getItem('myPersonalId'), function (err) {
                         if (err) {
                             console.log(err);
                             sAlert.error(err.reason);
                         }
-                        diag.dialog('close');
-                        diag.remove();
                     });
+                    
+                    diag.dialog('close');
+                    diag.remove();
                 },
                 'Отмена': function () {
                     diag.dialog('close');
