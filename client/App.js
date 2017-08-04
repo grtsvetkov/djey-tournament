@@ -122,8 +122,6 @@ Template.index.helpers({
     'error': function() {
         var p = Con.findOne({_id: localStorage.getItem('myPersonalId')});
 
-        console.log(p);
-
         if(p && p.error) {
             sAlert.error(p.error);
             Meteor.call('con.readError', localStorage.getItem('myPersonalId'));
@@ -167,7 +165,7 @@ Template.index.helpers({
     },
 
     'con_list': function () {
-        return Con.find({name: {$exists: true}, command: {$eq: 0}}, {sort: {online: -1}}).fetch();
+        return Con.find({name: {$exists: true}, command: {$eq: 0}}, {sort: {online: -1, name: 1}}).fetch();
     },
 
     'command_list': function () {

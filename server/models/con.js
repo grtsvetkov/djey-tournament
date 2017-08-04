@@ -73,7 +73,7 @@ ConModel = {
     },
 
     unsetName: function (_id) {
-        Con.update({_id: _id, con_id: this.connection.id}, {$set: {name: '', command: null, vg: '', vg_level: 0}});
+        Con.update({_id: _id, con_id: this.connection.id}, {$set: {name: '', command: null, vg_id: '', vg_level: 0}});
     },
 
     setCommand: function(_id, command) {
