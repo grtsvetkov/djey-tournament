@@ -14,3 +14,7 @@ Meteor.publish('com', function() {
 Meteor.publish('env', function() {
     return Env.find({name: {$ne: 'password'}});
 });
+
+Meteor.publish('ban', function() {
+    return Ban.find({});
+});

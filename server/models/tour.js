@@ -101,6 +101,18 @@ TourModel = {
 
         } else {
             Env.update({name: 'status'}, { $set: {val: String(data.win)} });
+            
+            var tmp = Con.find({command: {$gt: 0}}).fetch();
+            
+            Ban.remove({type: 'last_tour'});
+            
+            _.each(tmp, function(i){
+                if(i.name  && i.vg_id && i.vg_level && i.command > 0) {
+                    Ban.insert({name: i.name, vg_level: i.vg_level, vg_id: i.vg_id, type: 'last_tour'});
+                } else {
+                    console.log(i);
+                }
+            });
         }
 
         Tour.update({tour: data.tour, match: data.match}, { $set: {status: 1} });
