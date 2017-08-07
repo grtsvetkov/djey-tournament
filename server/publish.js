@@ -18,3 +18,7 @@ Meteor.publish('env', function() {
 Meteor.publish('ban', function() {
     return Ban.find({});
 });
+
+Meteor.publish('draft', function (code) {
+    return Draft.find({});
+});

@@ -16,4 +16,10 @@ Meteor.startup(function(){
     if(!flag) {
         Env.insert({name: 'name', val: 'VainGlory турнир от Djey'});
     }
+
+    if(Draft.find({}).count() == 0) {
+        Draft.insert({name: 'A', val: 0});
+        Draft.insert({name: 'B', val: 0});
+        Draft.insert({name: 'data', val: {}});
+    }
 });

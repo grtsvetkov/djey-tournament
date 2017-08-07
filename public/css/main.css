@@ -355,65 +355,37 @@ li.commandItem p span.edit {
 
 
 
-
-#wrapper {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+#dbd {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 1);
+    z-index: 2;
+    min-width: 1000px;
 }
 
-#wrapper div {
-    vertical-align: top;
+#dbd #closeDBD {
     margin-left: auto;
     margin-right: auto;
-}
-
-#block-info {
+    position: relative;
     display: block;
-    width: 90%;
-    text-align: center;
-    margin-bottom: 30px;
 }
 
-#block-info div {
-    display: inline-block;
-}
-
-#block-info #block-auth {
-    width: 30%;
-}
-
-#block-info #block-log {
-    width: 60%;
-    height: 100px;
-    overflow-y: scroll;
-
-}
-
-#block-admin {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-#block-admin div{
-    vertical-align: top;
+#dbd .wrap {
+    position: relative;
     margin-left: auto;
     margin-right: auto;
-    display: inline-block;
-    text-align: center;
-}
-
-#block-admin .createDraft {
-    width: 59%;
-    padding: 0;
-    margin:0;
+    width: 95%;
+    margin-bottom: 40px;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
 }
 
 .block-action {
+    vertical-align: top;
     display:inline-block;
-    width: 20%;
-    margin-left: auto;
-    margin-right: auto;
+
 }
 
 .block-action.teamA div{
@@ -440,21 +412,38 @@ li.commandItem p span.edit {
     background-size: 100%;
 }
 
+.block-action .players {
+    margin-top: 10px;
+    width: 140px;
+    color: #ffffff;
+    background-image: none;
+}
+
+.block-action .players p.current {
+    border: 2px solid green;
+}
+
+.block-action .players p div{
+    margin-top: 0px;
+    border: none;
+}
+
 .block-action .ban{
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
 }
 
 .block-action .pick{
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
 }
 
 #heroesIcons {
     display:inline-block;
-    width: 59%;
+    width: 60%;
     padding: 0;
     margin:0;
+    margin-top: 30px;
 }
 
 #heroesIcons div {

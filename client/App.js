@@ -1,5 +1,14 @@
+const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
+const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
+const playerByStep = [0, 0, 0, 0, 0, 0, 1, 1, 2, 2];
+
+var heroes = ['grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
+    'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
+    'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
+];
+
 Template.AppLayout.helpers({
-    'name': function() {
+    'name': function () {
         var val = Env.findOne({name: 'name'});
 
         return val && val.name ? val.val : null;
@@ -8,7 +17,7 @@ Template.AppLayout.helpers({
 
 Template.AppLayout.events({
 
-    'click #newTour': function(e) {
+    'click #newTour': function (e) {
         e.preventDefault();
         var diag = $(`
             <div id="myDialog" title="Внимание!">
@@ -47,12 +56,17 @@ Template.AppLayout.events({
 });
 
 Template.envStatus.helpers({
-    'status': function() {
+    'status': function () {
         var val = Env.findOne({name: 'status'});
 
-        if(val) {
+        console.log('val', val);
+
+        if (val) {
             if (val.val == '0') {
                 return;
+
+            } else if(val.val == '-1') {
+                return val.val;
             } else {
                 return 'Турнир окончен.<br> Победа за <strong>' + comName(val.val) + '</strong>!';
             }
@@ -77,7 +91,7 @@ Template.setPlayer.rendered = function () {
                     sAlert.error('Введите игровой ник');
                     return;
                 } else {
-                    Meteor.call('con.setName', localStorage.getItem('myPersonalId'),  name, function (err) {
+                    Meteor.call('con.setName', localStorage.getItem('myPersonalId'), name, function (err) {
                         if (err) {
                             console.log(err);
                             sAlert.error(err.reason);
@@ -99,7 +113,7 @@ Template.liPlayer.rendered = function () {
 };
 
 Template.index.rendered = function () {
-    if(isAdmin()) {
+    if (isAdmin()) {
         $('#conList ul, .commandItem ul').sortable({
             connectWith: ".connectedSortable",
             stop: function (e, ui) {
@@ -119,15 +133,15 @@ Template.index.rendered = function () {
 
 Template.index.helpers({
 
-    'error': function() {
+    'error': function () {
         var p = Con.findOne({_id: localStorage.getItem('myPersonalId')});
 
-        if(p && p.error) {
+        if (p && p.error) {
             sAlert.error(p.error);
             Meteor.call('con.readError', localStorage.getItem('myPersonalId'));
         }
     },
-    
+
     'tour_list': function () {
         var tour = {};
 
@@ -208,7 +222,7 @@ Template.index.events({
                             sAlert.error(err.reason);
                         }
                     });
-                    
+
                     diag.dialog('close');
                     diag.remove();
                 },
@@ -221,14 +235,14 @@ Template.index.events({
         diag.dialog('open');
     },
 
-    'click .addRondomTo .edit': function(e) {
+    'click .addRondomTo .edit': function (e) {
         e.preventDefault();
 
         var key = $(e.currentTarget).parent().data('key');
 
         var diag = $(`
             <div id="myDialog" title="Переименовать команду">
-                <p><input id="newCommandName" style="width: 100%" type="text" value="`+comName(key)+`"></p>
+                <p><input id="newCommandName" style="width: 100%" type="text" value="` + comName(key) + `"></p>
             </div>`);
         diag.dialog({
             autoOpen: false,
@@ -257,7 +271,7 @@ Template.index.events({
 
     'click .addRondomTo': function (e) {
 
-        if(!isAdmin()) {
+        if (!isAdmin()) {
             return;
         }
 
@@ -299,7 +313,7 @@ Template.index.events({
         }
 
         var commandWin = ds.win;
-        var winButton = 'Победа за "' + comName(commandWin)+'"';
+        var winButton = 'Победа за "' + comName(commandWin) + '"';
 
         var commandLose = commands[0] == commandWin ? commands[1] : commands[0];
 
@@ -332,14 +346,26 @@ Template.index.events({
             buttons: buttons
         });
         diag.dialog('open');
-    }
+    },
+    
+    'click .draft': function(e) {
+        var ds = e.currentTarget.dataset;
 
+        Meteor.call('draft.create', ds.tour, ds.match, function (err, data) {
+            if (err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            } else {
+                sAlert.success('Draft created!');
+            }
+        });
+    }
 });
 
 Template.signin.events({
-    'click #authSend': function() {
-        Meteor.call('con.setAdmin', $('#authPassword').val(), function(err){
-            if(err) {
+    'click #authSend': function () {
+        Meteor.call('con.setAdmin', $('#authPassword').val(), function (err) {
+            if (err) {
                 console.log(err);
                 sAlert.error(err.reason);
             } else {
@@ -348,3 +374,101 @@ Template.signin.events({
         })
     }
 });
+
+Template.dbd.helpers({
+
+    'teamList': function(team) {
+
+        var data = Draft.findOne({name: 'data'});
+
+        if (!data || !data.val ) {
+            return;
+        }
+        
+        var currentTeam = data.val.currentTeam;
+        var currentPlayer = data.val.currentPlayer;
+
+        var teamIds = Draft.findOne({name: team});
+        
+        if(!teamIds) {
+            return;
+        }
+
+        return _.map(Con.find({_id: { $in: teamIds.val}}).fetch(), function(i, key) {
+            if(currentTeam == team && currentPlayer == key) {
+                i.isCurrent = true;
+            }
+            
+            return i;
+        });
+    },
+    
+    'heroes': function () {
+
+        var data = Draft.findOne({name: 'data'});
+        var steps = [];
+
+        if (data && data.val && data.val.steps) {
+            steps = data.val.steps;
+        }
+
+        return _.map(heroes, function (i) {
+            return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : ''};
+        });
+    },
+
+    'styleStep': function (n) {
+        var data = Draft.findOne({name: 'data'});
+
+        if (data && data.val) {
+            if (data.val.currentStep == n) {
+                var color = teamByStep[n] == 'A' ? '#63D1F4' : '#FBA16C';
+                return 'background-color: ' + color;
+            } else if (data.val.steps && data.val.steps[n]) {
+                if (actionByStep[n] == 'ban') {
+                    var back = teamByStep[n] == 'A' ? 'blueban' : 'orangeban';
+                    return 'background-image: url(\'/css/' + back + '.png\'), url(\'/img/' + data.val.steps[n] + '.gif\'); background-position: center, center; background-repeat: no-repeat;';
+                } else {
+                    return 'background-image: url(\'/img/' + data.val.steps[n] + '.gif\');';
+                }
+            }
+        }
+    }
+});
+
+Template.dbd.events({
+
+    'click #closeDBD': function() {
+        Meteor.call('draft.close');
+    },
+    
+    'click #heroesIcons div': function (e) {
+
+        var h = e.currentTarget.dataset.name;
+        var data = Draft.findOne({name: 'data'});
+        var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+
+        if(!team) {
+            sAlert.error('Ошибка авторизации');
+            return;
+        }
+
+        console.log(data, team, localStorage.getItem('myPersonalId'));
+
+        if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
+            if (data.val.steps && data.val.steps.indexOf(h) <= -1) {
+                Meteor.call('draft.step', h, function (err) {
+                    if (err) {
+                        console.log(err);
+                        sAlert.error(err.reason);
+                    }
+                })
+            } else {
+                sAlert.error('Герой уже был выбран ранее');
+            }
+        } else {
+            sAlert.error('Сейчас не Ваш ход');
+        }
+    }
+});
+ 

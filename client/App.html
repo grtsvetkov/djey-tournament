@@ -41,9 +41,13 @@
 
 <template name="envStatus">
     {{#with status}}
-        <div id="envStatus">
-            {{{.}}}
-        </div>
+        {{#if eq status '-1'}}
+            {{>dbd}}
+        {{else}}
+            <div id="envStatus">
+                {{{.}}}
+            </div>
+        {{/if}}
     {{/with}}
 </template>
 
@@ -67,7 +71,7 @@
                         {{#each match in tour}}
                             <div class="match">
                                 {{#if is_admin}}
-                                    <button class="draft">D</button>
+                                    <button data-tour="{{match.tour}}" data-match="{{match.match}}" class="draft">D</button>
                                 {{/if}}
                                 <div class="inline">
                                     <div class="command">
@@ -153,7 +157,8 @@
 
 <template name="liPlayer">
     <li data-id="{{_id}}">
-        <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</li>
+        <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})
+    </li>
 </template>
 
 <template name="signin">
@@ -161,6 +166,51 @@
         <div id="mainBlock" class="row">
             <input type="password" id="authPassword">
             <button id="authSend">Auth</button>
+        </div>
+    </div>
+</template>
+
+<template name="dbd">
+    <div id="dbd">
+        {{#if is_admin}}
+            <button id="closeDBD">Закрыть драфт</button>
+        {{/if}}
+        <div class="wrap">
+            <div class="block-action teamA">
+                {{#with teamList 'A'}}
+                    <div class="players">
+                        {{#each .}}
+                            <p class="{{#if isCurrent}}current{{/if}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                        {{/each}}
+                    </div>
+                {{/with}}
+                <div id="action-step0" class="ban" style="{{styleStep 0}}"></div>
+                <div id="action-step2" class="pick" style="{{styleStep 2}}"></div>
+                <div id="action-step5" class="ban" style="{{styleStep 5}}"></div>
+                <div id="action-step7" class="pick" style="{{styleStep 7}}"></div>
+                <div id="action-step8" class="pick" style="{{styleStep 8}}"></div>
+            </div>
+
+            <div id="heroesIcons">
+                {{#each heroes}}
+                    <div class="{{class}}" data-name="{{name}}"
+                         style="background-image: url('/img/{{name}}.gif')"></div>{{/each}}
+            </div>
+
+            <div class="block-action teamB">
+                {{#with teamList 'B'}}
+                    <div class="players">
+                        {{#each .}}
+                            <p class="{{#if isCurrent}}current{{/if}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                        {{/each}}
+                    </div>
+                {{/with}}
+                <div id="action-step1" class="ban" style="{{styleStep 1}}"></div>
+                <div id="action-step3" class="pick" style="{{styleStep 3}}"></div>
+                <div id="action-step4" class="ban" style="{{styleStep 4}}"></div>
+                <div id="action-step6" class="pick" style="{{styleStep 6}}"></div>
+                <div id="action-step9" class="pick" style="{{styleStep 9}}"></div>
+            </div>
         </div>
     </div>
 </template>
