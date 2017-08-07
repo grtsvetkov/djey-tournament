@@ -1,3 +1,5 @@
+//https://lyra.vgpro.gg/matches/eu/djeyclub/all/
+
 const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
 const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
 const playerByStep = [0, 0, 0, 0, 0, 0, 1, 1, 2, 2];
@@ -58,8 +60,6 @@ Template.AppLayout.events({
 Template.envStatus.helpers({
     'status': function () {
         var val = Env.findOne({name: 'status'});
-
-        console.log('val', val);
 
         if (val) {
             if (val.val == '0') {
@@ -487,8 +487,6 @@ Template.dbd.events({
             sAlert.error('Ошибка авторизации');
             return;
         }
-
-        console.log(data, team, localStorage.getItem('myPersonalId'));
 
         if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
             if (data.val.steps && data.val.steps.indexOf(h) <= -1) {

@@ -10,7 +10,15 @@ TourModel = {
 
         Com.remove({}); //Удаляем название команда
         Con.remove({online: false}); //Удаляем оффлайн
-        Con.update({}, {$set : {command: 0}}); //Все онлайн коннекшены в общий пулл
+        _.each(Con.find().fetch(), function(i){
+            
+            if(i.online == false) {
+                Con.remove({_id: i.id})
+            } else {
+                Con.update({_id: i._id}, {$set: {command: 0}}); //Все онлайн коннекшены в общий пулл
+            }
+        });
+        
         Tour.remove({}); //Удаляем турнамент
 
         Env.update({name: 'status'}, { $set: {val: '0'} });

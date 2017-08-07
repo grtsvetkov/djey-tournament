@@ -33,6 +33,9 @@ ConModel = {
                     //throw new Meteor.Error(1, 'Игрок не найден в игре (EU регион)');
                     return;
                 }
+
+            console.log(player.data[0].attributes);
+
                 ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, player.data[0].attributes.stats.level);
         })).catch(function(errors) {
             Con.update({_id: _id}, { $set: {error: 'Игрок не найден в игре (EU регион)'} });
