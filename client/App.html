@@ -152,6 +152,13 @@
                 </li>
             {{/each}}
         </ul>
+        <ul id="lastList" class="row">
+            {{#each last_list}}
+                <li>
+                    <div data-name="{{name}}" class="remove">&#8635;</div>{{name}} ({{vg_level}})
+                </li>
+            {{/each}}
+        </ul>
     </div>
 </template>
 

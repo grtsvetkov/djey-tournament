@@ -186,6 +186,10 @@ Template.index.helpers({
         return [1, 2, 3, 4, 5, 6, 7, 8];
     },
 
+    'last_list': function () {
+        return Ban.find({type: 'last_tour'}).fetch();
+    },
+
     'command_player': function (num) {
         return Con.find({name: {$exists: true}, command: num}, {sort: {online: -1}}).fetch();
     },
@@ -359,6 +363,37 @@ Template.index.events({
                 sAlert.success('Draft created!');
             }
         });
+    },
+    
+    'click #lastList .remove': function(e) {
+        e.preventDefault();
+        var diag = $(`
+            <div id="myDialog" title="Внимание!">
+                <span id="dialogMsg">Удалить `+e.currentTarget.dataset.name+ ` из списка прошлых участинков?</span>
+            </div>`);
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Да, удалить': function () {
+                    Meteor.call('con.removeFromBan', e.currentTarget.dataset.name, function (err) {
+                        if (err) {
+                            console.log(err);
+                            sAlert.error(err.reason);
+                        }
+                        diag.dialog('close');
+                        diag.remove();
+                    });
+                },
+                'Отмена': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+
+        return false;
     }
 });
 

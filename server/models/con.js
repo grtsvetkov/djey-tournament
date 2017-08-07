@@ -121,6 +121,13 @@ ConModel = {
 
         var item = list[_.random(0, list.length-1)];
 
+        var test = Ban.findOne({name: item.name});
+
+        if(test) {
+            throw new Meteor.Error(3, 'Был выбран '+item.name+', который не может принимать участие в турнире');
+            return;
+        }
+
         Con.update({_id: item._id}, {$set: {command: command}});
     },
 
@@ -155,7 +162,17 @@ ConModel = {
     readError: function(_id) {
 
         Con.update({_id: _id}, { $set: {error: ''} });
+    },
+
+    removeFromBan: function(name) {
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+
+        Ban.remove({name: name});
     }
+    
 };
 
 /**
@@ -168,7 +185,8 @@ Meteor.methods({
     'con.setCommand': ConModel.setCommand,
     'con.getRandomTo': ConModel.getRandomTo,
     'con.setAdmin': ConModel.setAdmin,
-    'con.readError': ConModel.readError
+    'con.readError': ConModel.readError,
+    'con.removeFromBan': ConModel.removeFromBan
 });
 
 Meteor.onConnection(function(connection) {
