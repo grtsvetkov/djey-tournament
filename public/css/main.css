@@ -178,19 +178,21 @@ button:hover {
 
 #mainBlock {
     height: 400px;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
 }
 
 #commandTable {
     position: relative;
     display: inline-block;
     width: 100%;
-    float: left;
     height: 400px;
-    margin-right: -300px;
     background-color: rgba(255, 255, 255, 0.4);
     vertical-align: middle;
     text-align: center;
-    border-radius: 7px;
+    border-radius: 7px 0 0 7px;
 }
 
 #commandTable .wrap {
@@ -257,14 +259,13 @@ button:hover {
 }
 
 #conList {
-    border-radius: 7px;
+    border-radius: 0 7px 7px 0;
     position:relative;
     display: inline-block;
     width: 250px;
     height: 400px;
-    float: right;
     margin: 0;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 #conList ul {
