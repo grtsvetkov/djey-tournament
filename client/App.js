@@ -17,6 +17,19 @@ Template.AppLayout.helpers({
     }
 });
 
+
+var commandSort = function() {
+    $('.commandListUL').each(function(){
+        var command = parseInt(this.dataset.key);
+        var list = [];
+        $(this).find('li').each(function(){
+            list.push(this.dataset.id);
+        });
+
+        Meteor.call('con.setCommandListSort', command, list);
+    })
+};
+
 Template.AppLayout.events({
 
     'click #newTour': function (e) {
@@ -124,6 +137,8 @@ Template.index.rendered = function () {
                         Meteor.setTimeout(function () {
                             document.location.reload(true);
                         });
+                    } else {
+                        commandSort();
                     }
                 });
             }
@@ -191,7 +206,16 @@ Template.index.helpers({
     },
 
     'command_player': function (num) {
-        return Con.find({name: {$exists: true}, command: num}, {sort: {online: -1}}).fetch();
+
+        var com = Com.findOne({num: parseInt(num)});
+
+        if(!com || !com.list) {
+            return;
+        }
+
+        return _.map(com.list, function(_id){
+            return Con.findOne({_id: _id});
+        })
     },
 
     'stats': function () {

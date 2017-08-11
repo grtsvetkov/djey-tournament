@@ -9,6 +9,8 @@ body, html {
     opacity: 1;
     visibility: visible;
     background: url('images/background.png') no-repeat, no-repeat #000000;
+    -webkit-background-size: cover;
+    background-size: cover;
     min-width: 1000px;
     font-family: SANS-SERIF;
 }
@@ -435,6 +437,7 @@ li.commandItem p span.edit {
 
 .block-action .players p.current {
     border: 2px solid green;
+    background-color: rgba(0,128,0, 0.5);
 }
 
 .block-action .players p div{

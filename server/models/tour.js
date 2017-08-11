@@ -34,7 +34,7 @@ TourModel = {
         var commandPull = []; //Пулл комманд
 
         for(var x = 1; x <= commandCount; x++) { //Заполняем пулл комманд
-            Com.insert({num: x, name: 'Команда №'+x});
+            Com.insert({num: x, name: 'Команда №'+x, list: []});
             commandPull.push(x);
         }
 

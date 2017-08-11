@@ -146,7 +146,7 @@
                         {{com_name .}}
                         {{#if is_admin}}<span class="edit">&#9998;</span>{{/if}}
                     </p>
-                    <ul data-key="{{.}}" id="commandItem{{.}}" class="connectedSortable">
+                    <ul data-key="{{.}}" id="commandItem{{.}}" class="commandListUL connectedSortable">
                         {{#each command_player .}}
                             {{>liPlayer}}
                         {{/each}}
@@ -192,7 +192,7 @@
                 {{#with teamList 'A'}}
                     <div class="players">
                         {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
                         {{/each}}
                     </div>
                 {{/with}}
@@ -213,7 +213,7 @@
                 {{#with teamList 'B'}}
                     <div class="players">
                         {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
                         {{/each}}
                     </div>
                 {{/with}}

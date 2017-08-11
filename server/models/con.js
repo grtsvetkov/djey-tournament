@@ -34,8 +34,6 @@ ConModel = {
                     return;
                 }
 
-            console.log(player.data[0].attributes);
-
                 ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, player.data[0].attributes.stats.level);
         })).catch(function(errors) {
             Con.update({_id: _id}, { $set: {error: 'Игрок не найден в игре (EU регион)'} });
@@ -88,7 +86,7 @@ ConModel = {
 
         var flag = Con.find({command: command}).count();
 
-        if(flag >= 3 && command > 0) {
+        if(flag > 3 && command > 0) {
             throw new Meteor.Error(2, 'В команде может быть не больше трёх игроков');
             return;
         }
@@ -132,6 +130,9 @@ ConModel = {
         }
 
         Con.update({_id: item._id}, {$set: {command: command}});
+
+        console.log({num: parseInt(command)}, {$push: {list: item._id}});
+        Com.update({num: parseInt(command)}, {$push: {list: item._id}});
     },
 
     setAdmin: function(password) {
@@ -174,8 +175,17 @@ ConModel = {
         }
 
         Ban.remove({name: name});
+    },
+
+    setCommandListSort: function(num, list) {
+
+        if(!ConModel.isAdmin(this.connection.id)) {
+            throw new Meteor.Error(9, 'Ошибка авторизации');
+            return;
+        }
+        
+        Com.update({num: num}, {$set: {list: list}});
     }
-    
 };
 
 /**
@@ -189,7 +199,8 @@ Meteor.methods({
     'con.getRandomTo': ConModel.getRandomTo,
     'con.setAdmin': ConModel.setAdmin,
     'con.readError': ConModel.readError,
-    'con.removeFromBan': ConModel.removeFromBan
+    'con.removeFromBan': ConModel.removeFromBan,
+    'con.setCommandListSort': ConModel.setCommandListSort
 });
 
 Meteor.onConnection(function(connection) {

@@ -28,16 +28,11 @@ DraftModel = {
             return;
         }
 
-        var teamA = _.map(Con.find({command: data.commands[0]}).fetch(), function (i) {
-            return i._id;
-        });
+        var teamA = Com.findOne({num: parseInt(data.commands[0])}).list;
 
-        var teamB = _.map(Con.find({command: data.commands[1]}).fetch(), function (i) {
-            return i._id;
-        });
+        var teamB = Com.findOne({num: parseInt(data.commands[1])}).list;
 
         if(teamA.length == 3 && teamB.length == 3) {
-
             Draft.update({name: 'A'}, {$set: {val: teamA}});
             Draft.update({name: 'B'}, {$set: {val: teamB}});
             Draft.update({name: 'data'}, {$set: {val: defaultDraft}});

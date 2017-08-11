@@ -50,6 +50,7 @@ function buildMeteorApp(appPath, meteorBinary, buildLocaltion, callback) {
     }
 
     var options = {cwd: appPath};
+    console.log(args.join(' '));
     var meteor = spawn(executable, args, options);
     var stdout = "";
     var stderr = "";
