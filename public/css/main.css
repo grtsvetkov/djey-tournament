@@ -340,11 +340,21 @@ li.commandItem p span.edit {
     display: none;
 }
 
-#lastList {
+fieldset {
+    margin: 0;
     margin-top: 30px;
     background-color: rgba(255, 255, 255, 0.7);
     padding: 10px;
     border-radius: 7px;
+    border: none;
+}
+
+fieldset legend{
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#lastList {
+
 }
 
 #lastList li{

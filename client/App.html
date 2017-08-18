@@ -7,8 +7,6 @@
 </head>
 
 <body>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>(adsbygoogle = window.adsbygoogle || []).push({ google_ad_client: "ca-pub-2092301732899176", enable_page_level_ads: true }); </script>
 {{>sAlert}}
 {{>envStatus}}
 </body>
@@ -154,16 +152,19 @@
                 </li>
             {{/each}}
         </ul>
-        <ul id="lastList" class="row">
-            {{#each last_list}}
-                <li>
-                    {{#if is_admin}}
-                    <div data-name="{{name}}" class="remove">&#8635;</div>
-                    {{/if}}
-                    {{name}} ({{vg_level}})
-                </li>
-            {{/each}}
-        </ul>
+        <fieldset>
+            <legend>Участники прошлого турнира</legend>
+            <ul id="lastList" class="row">
+                {{#each last_list}}
+                    <li>
+                        {{#if is_admin}}
+                        <div data-name="{{name}}" class="remove">&#8635;</div>
+                        {{/if}}
+                        {{name}} ({{vg_level}})
+                    </li>
+                {{/each}}
+            </ul>
+        </fieldset>
     </div>
 </template>
 

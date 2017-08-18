@@ -4,7 +4,7 @@ const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
 const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
 const playerByStep = [0, 0, 0, 0, 0, 0, 1, 1, 2, 2];
 
-var heroes = ['grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
+var heroes = ['reza', 'grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
     'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
     'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
 ];
@@ -452,14 +452,19 @@ Template.dbd.helpers({
         if(!teamIds) {
             return;
         }
-
-        return _.map(Con.find({_id: { $in: teamIds.val}}).fetch(), function(i, key) {
+        
+        var list = [];
+        
+        _.each(teamIds.val, function(i, key){
+            var player = Con.findOne({_id: i});
             if(currentTeam == team && currentPlayer == key) {
-                i.isCurrent = true;
+                player.isCurrent = true;
             }
             
-            return i;
+            list.push(player);
         });
+
+        return list;
     },
     
     'heroes': function () {
