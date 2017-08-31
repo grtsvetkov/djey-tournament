@@ -9,7 +9,8 @@ var defaultDraft = {
     currentStep: 0,
     steps: [],
     ban: [],
-    pick: []
+    pick: [],
+    like: {'A': {}, 'B': {}}
 };
 
 DraftModel = {
@@ -92,12 +93,53 @@ DraftModel = {
                     'val.currentTeam': data.currentTeam,
                     'val.steps': data.steps,
                     'val.ban': data.ban,
-                    'val.pick': data.pick
+                    'val.pick': data.pick,
+                    'val.like': data.like
                 }
             });
         } else {
             throw new Meteor.Error('500', 'Герой уже был выбран ранее');
         }
+    },
+
+    setLike: function(h, a) {
+        var currentPlayer = Con.findOne({con_id: this.connection.id});
+
+        if (!currentPlayer) {
+            throw new Meteor.Error(31, 'Ошибка авторизации');
+            return;
+        }
+
+        var data = Draft.findOne({name: 'data'});
+        var data_id = 0;
+
+        if (data && data.val) {
+            data_id = data._id;
+            data = data.val;
+        } else {
+            throw new Meteor.Error(32, 'Ошибка авторизации');
+            return;
+        }
+
+        var team = Draft.findOne({'val': currentPlayer._id});
+
+        if(!data.like[team.name][h]) {
+            data.like[team.name][h] = {};
+        }
+
+        data.like[team.name][h][currentPlayer.name] = a;
+
+        Draft.update({_id: data_id}, {
+            $set: {
+                'val.currentStep': data.currentStep,
+                'val.currentPlayer': data.currentPlayer,
+                'val.currentTeam': data.currentTeam,
+                'val.steps': data.steps,
+                'val.ban': data.ban,
+                'val.pick': data.pick,
+                'val.like': data.like
+            }
+        });
     },
 
     close: function() {
@@ -113,6 +155,7 @@ DraftModel = {
 Meteor.methods({
     'draft.create': DraftModel.create,
     'draft.step': DraftModel.step,
+    'draft.setLike': DraftModel.setLike,
     'draft.close': DraftModel.close
 });
 

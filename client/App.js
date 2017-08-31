@@ -77,7 +77,6 @@ Template.envStatus.helpers({
         if (val) {
             if (val.val == '0') {
                 return;
-
             } else if(val.val == '-1') {
                 return val.val;
             } else {
@@ -476,9 +475,26 @@ Template.dbd.helpers({
             steps = data.val.steps;
         }
 
-        return _.map(heroes, function (i) {
-            return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : ''};
-        });
+        var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+
+        if(!team) {
+            return _.map(heroes, function (i) {
+                return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : ''};
+            });
+        } else {
+            return _.map(heroes, function (i) {
+                
+                var likes = [];
+                
+                if(data.val.like[team.name][i]) {
+                    likes = _.map(data.val.like[team.name][i], function(action, name){
+                        return {name: name, action: action};
+                    })
+                }
+                
+                return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : '', 'likes': likes};
+            });
+        }
     },
 
     'styleStep': function (n) {
@@ -500,37 +516,86 @@ Template.dbd.helpers({
     }
 });
 
+var selectHeroes = function(e) {
+    var h = e.currentTarget.dataset.name;
+    var data = Draft.findOne({name: 'data'});
+    var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+
+    if(!team) {
+        sAlert.error('Ошибка авторизации!');
+        return;
+    }
+
+    if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
+        if (data.val.steps && data.val.steps.indexOf(h) <= -1) {
+            Meteor.call('draft.step', h, function (err) {
+                if (err) {
+                    console.log(err);
+                    sAlert.error(err.reason);
+                }
+            })
+        } else {
+            sAlert.error('Герой уже был выбран ранее');
+        }
+    } else {
+        sAlert.error('Сейчас не Ваш ход');
+    }
+};
+
+var dblClickDetector = false;
+
 Template.dbd.events({
 
     'click #closeDBD': function() {
         Meteor.call('draft.close');
     },
-    
-    'click #heroesIcons div': function (e) {
 
-        var h = e.currentTarget.dataset.name;
-        var data = Draft.findOne({name: 'data'});
-        var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+    'click .likeSelector img': function(e) {
 
-        if(!team) {
-            sAlert.error('Ошибка авторизации');
+        e.preventDefault();
+
+        var _myId = localStorage.getItem('myPersonalId');
+
+        if(!_myId) {
             return;
         }
 
-        if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
-            if (data.val.steps && data.val.steps.indexOf(h) <= -1) {
-                Meteor.call('draft.step', h, function (err) {
-                    if (err) {
-                        console.log(err);
-                        sAlert.error(err.reason);
-                    }
-                })
-            } else {
-                sAlert.error('Герой уже был выбран ранее');
-            }
-        } else {
-            sAlert.error('Сейчас не Ваш ход');
+        var h = e.currentTarget.dataset.name;
+        var a = e.currentTarget.dataset.action;
+        var team = Draft.findOne({'val': _myId});
+
+        if(!team) {
+            return;
         }
+
+        Meteor.call('draft.setLike', h, a);
+         $('.likeSelector').addClass('hidden');
+
+        return false;
+    },
+
+    'touchend #heroesIcons .heroSelector, click #heroesIcons .heroSelector': function(e) { //NO ZOOM
+        e.preventDefault();
+
+        if(dblClickDetector) {
+            selectHeroes(e);
+            dblClickDetector = false;
+        } else {
+            dblClickDetector = true;
+
+            Meteor.setTimeout(function() {
+                if(dblClickDetector) {
+                    if(!Draft.findOne({'val': localStorage.getItem('myPersonalId')})) {
+                        return;
+                    } else {
+                        $('.likeSelector').addClass('hidden');
+                        $(e.currentTarget).find('.likeSelector').removeClass('hidden');
+                    }
+                }
+                dblClickDetector = false;
+            }, 555);
+        }
+        return false;
     }
 });
  

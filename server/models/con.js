@@ -27,6 +27,7 @@ ConModel = {
     setName: function (_id, name) {
 
         vainglory.players.getByName([name]).then(Meteor.bindEnvironment(function(player) {
+
                 if(!player || !player.player || !player.player[0].data || !player.data[0].id) {
                     //console.log(player);
                     Con.update({_id: _id}, { $set: {error: 'Игрок не найден в игре (EU регион)'} });
@@ -34,7 +35,7 @@ ConModel = {
                     return;
                 }
 
-                ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, player.data[0].attributes.stats.level);
+                ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, Math.ceil((player.data[0].attributes.stats.skillTier + 1) / 3));
         })).catch(function(errors) {
             Con.update({_id: _id}, { $set: {error: 'Игрок не найден в игре (EU регион)'} });
             //console.log('errors', errors);
@@ -75,6 +76,7 @@ ConModel = {
 
     unsetName: function (_id) {
         Con.update({_id: _id, con_id: this.connection.id}, {$set: {name: '', command: null, vg_id: '', vg_level: 0}});
+
     },
 
     setCommand: function(_id, command) {

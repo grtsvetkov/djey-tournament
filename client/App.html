@@ -189,6 +189,7 @@
             <button id="closeDBD">Закрыть драфт</button>
         {{/if}}
         <div class="wrap">
+
             <div class="block-action teamA">
                 {{#with teamList 'A'}}
                     <div class="players">
@@ -206,8 +207,18 @@
 
             <div id="heroesIcons">
                 {{#each heroes}}
-                    <div class="{{class}}" data-name="{{name}}"
-                         style="background-image: url('/img/{{name}}.gif')"></div>{{/each}}
+                    <div class="{{class}} heroSelector" data-name="{{name}}"
+                         style="background-image: url('/img/{{name}}.gif')">
+                        <div class="likeSelected">
+                            {{#each likes}}
+                                <span><img src="/css/images/{{action}}.png"> {{name}}</span>
+                            {{/each}}
+                        </div>
+                        <div class="likeSelector hidden">
+                            <img data-action="like" data-name="{{name}}" src="/css/images/like.png">
+                            <img data-action="dislike" data-name="{{name}}" src="/css/images/dislike.png">
+                        </div>
+                    </div>{{/each}}
             </div>
 
             <div class="block-action teamB">
