@@ -132,7 +132,7 @@ Template.envStatus.events({
 
     'click #startBet': function(e) {
 
-        betTime = 10;
+        betTime = 300;
 
         Meteor.call('bet.start', function (err) {
             if (err) {

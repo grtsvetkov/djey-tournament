@@ -596,6 +596,7 @@ fieldset legend{
 #heroesIcons div .likeSelected {
     margin-top: 5px;
     height: 95px;
+    white-space: nowrap;
 }
 
 #heroesIcons div .likeSelected span {
@@ -603,7 +604,7 @@ fieldset legend{
     height: 30px;
     color: #FFFFFF;
     background: rgba(0, 0, 0, 0.6);
-    font-size: 20px;
+    font-size: 17px;
 }
 
 #heroesIcons div .likeSelected span img{
