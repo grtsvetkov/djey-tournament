@@ -19,6 +19,10 @@ Meteor.publish('ban', function() {
     return Ban.find({});
 });
 
+Meteor.publish('bet', function() {
+    return Bet.find({});
+});
+
 Meteor.publish('draft', function (code) {
     return Draft.find({});
 });

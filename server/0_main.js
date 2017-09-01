@@ -17,6 +17,18 @@ Meteor.startup(function(){
         Env.insert({name: 'name', val: 'VainGlory турнир от Djey'});
     }
 
+    var flag = Env.findOne({name: 'bet'});
+
+    if(!flag) {
+        Env.insert({name: 'bet', val: '0'});
+    }
+
+    var flag = Env.findOne({name: 'betTime'});
+
+    if(!flag) {
+        Env.insert({name: 'betTime', val: '0'});
+    }
+
     if(Draft.find({}).count() == 0) {
         Draft.insert({name: 'A', val: 0});
         Draft.insert({name: 'B', val: 0});

@@ -23,6 +23,7 @@
                     {{/with}}
                     {{#if is_admin}}
                         <button id="newTour">Новый турнир</button>
+                        <button id="newBet">Новые ставки</button>
                     {{/if}}
                 </span>
             </div>
@@ -41,12 +42,60 @@
 
 <template name="envStatus">
     {{#with status}}
-        {{#if eq status '-1'}}
+        {{consoleLog .}}
+        {{#if eq . '-1'}}
             {{>dbd}}
         {{else}}
-            <div id="envStatus">
-                {{{.}}}
-            </div>
+            {{#if eq . '-2'}}
+                <div id="envBet">
+                    <div class="betTitle">Делаем ставки</div>
+                    <div class="betWrap">
+                        {{#with bet}}
+                            <div id="win">
+                                <span>На победу</span>
+                                {{#if is_admin}}
+                                    <div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>
+                                {{else}}
+                                    {{#if eq betStatus '1'}}
+                                        <div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>
+                                    {{/if}}
+                                {{/if}}
+                                {{#each betList 'win'}}
+                                    <span>{{name}}</span>
+                                {{/each}}
+                            </div>
+                            <div id="time">
+                                {{#if is_admin}}
+                                    {{#if eq betStatus '0'}}
+                                        <button id="startBet">Старт</button>
+                                    {{/if}}
+                                {{/if}}
+                                <span>{{{time}}}</span>
+                                {{#if is_admin}}
+                                    <button id="stopBet">Стоп</button>
+                                {{/if}}
+                            </div>
+                            <div id="lose">
+                                <span>На поражение</span>
+                                {{#if is_admin}}
+                                    <div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>
+                                {{else}}
+                                    {{#if eq betStatus '1'}}
+                                        <div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>
+                                    {{/if}}
+                                {{/if}}
+                                {{#each betList 'lose'}}
+                                    <span>{{name}}</span>
+                                {{/each}}
+                            </div>
+                        {{/with}}
+                    </div>
+                </div>
+            {{else}}
+                <div id="envStatus">
+                    {{{.}}}
+                </div>
+            {{/if}}
         {{/if}}
     {{/with}}
 </template>

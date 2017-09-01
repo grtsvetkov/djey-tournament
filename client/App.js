@@ -31,7 +31,6 @@ var commandSort = function() {
 };
 
 Template.AppLayout.events({
-
     'click #newTour': function (e) {
         e.preventDefault();
         var diag = $(`
@@ -63,10 +62,18 @@ Template.AppLayout.events({
 
         return false;
     },
+    
+    'click #newBet': function (e) {
+        e.preventDefault();
+        
+        Meteor.call('bet.newBet', function (err) {
+            if (err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            }
+        });
 
-    'click #logo': function () {
-        var win = window.open('https://www.twitch.tv/djey2828', '_blank');
-        win.focus();
+        return false;
     }
 });
 
@@ -79,10 +86,123 @@ Template.envStatus.helpers({
                 return;
             } else if(val.val == '-1') {
                 return val.val;
+            } else if(val.val == '-2') {
+                return val.val;
             } else {
                 return 'Турнир окончен.<br> Победа за <strong>' + comName(val.val) + '</strong>!';
             }
         }
+    },
+
+    'betList': function(bet) {
+        console.log(bet);
+        console.log(Bet.find().fetch());
+        return Bet.find({bet: bet}).fetch();
+    },
+
+    'bet': function() {
+
+        var status = Env.findOne({name: 'bet'});
+        var time = Env.findOne({name: 'betTime'});
+
+        if(status.val != 3) {
+
+            time = !time ? 0 : parseInt(time.val);
+
+            var min = Math.floor(time / 60);
+            var sec = time - min * 60;
+
+            if (sec < 10) {
+                sec = '0' + sec;
+            }
+
+            time = min + ':' + sec;
+        } else {
+            time = 'Победитель:<br>'+ time.val + '!';
+        }
+
+        return {betStatus: status.val, time: time};
+    }
+});
+
+
+var betInterval = false, betTime;
+
+Template.envStatus.events({
+
+    'click #startBet': function(e) {
+
+        betTime = 10;
+
+        Meteor.call('bet.start', function (err) {
+            if (err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            } else {
+                betInterval = setInterval(function(){
+
+                    betTime--;
+
+                    Meteor.call('bet.setTime', betTime, function(err){
+                        if (err) {
+                            console.log(err);
+                            sAlert.error(err.reason);
+                        }
+                    });
+
+                    if(betTime < 1) {
+                        clearInterval(betInterval);
+                        Meteor.call('bet.endBet', function(err){
+                            if (err) {
+                                console.log(err);
+                                sAlert.error(err.reason);
+                            }
+                        });
+                    }
+                }, 1000);
+            }
+        });
+    },
+
+    'click .bet': function(e) {
+        var bet = e.currentTarget.dataset.bet;
+
+        if(isAdmin()) {
+            clearInterval(betInterval);
+            Meteor.call('bet.setWinner', bet, function(err){
+                if (err) {
+                    console.log(err);
+                    sAlert.error(err.reason);
+                }
+            });
+        } else {
+
+            var player = Con.findOne({_id: localStorage.getItem('myPersonalId')});
+
+            if (!player || !player.name) {
+                sAlert.error('Нажмите кнопку "Принять участие", что бы делать ставки');
+                return;
+            }
+
+            Meteor.call('bet.setBet', bet, function(err){
+                if (err) {
+                    console.log(err);
+                    sAlert.error(err.reason);
+                }
+            });
+        }
+    },
+
+
+    'click #stopBet': function(e) {
+        Meteor.call('bet.stop', function (err) {
+            if (err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            } else {
+                clearInterval(betInterval);
+            }
+        });
     }
 });
 
@@ -550,7 +670,7 @@ Template.dbd.events({
         Meteor.call('draft.close');
     },
 
-    'click .likeSelector img': function(e) {
+    'click .likeSelector img, touchend .likeSelector img': function(e) {
 
         e.preventDefault();
 

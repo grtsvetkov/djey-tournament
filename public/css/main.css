@@ -107,6 +107,88 @@ button:hover {
     box-shadow: 0 0 50px 40px rgba(0,0,0,1);
 }
 
+#envBet {
+    position: absolute;
+    z-index: 1;
+    top: 150px;
+    width: 360px;
+    height: 400px;
+    margin-left: 30%;
+    background: #000000;
+    color: #ffffff;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 15px;
+    box-shadow: 0 0 50px 40px rgba(0,0,0,1);
+}
+
+#envBet .betTitle {
+    display: block;
+    height: auto;
+    width: 360px;
+    padding-bottom: 15px;
+}
+
+#envBet .betWrap {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
+}
+
+#envBet .betWrap div {
+    margin: 0;
+    padding: 0;
+    width: 120px;
+    height: 400px;
+    overflow-y: hidden;
+}
+
+
+#envBet div .bet{
+    cursor: pointer;
+    margin: 0;
+    margin-bottom: 20px !important;
+    padding: 0;
+    width: 120px;
+    font-size: 14px;
+    height: auto;
+}
+
+#envBet div .bet img{
+    display: inline-block;
+    height: 20px;
+    border-radius: 6px;
+}
+
+#envBet #win{
+
+}
+
+#envBet #lose{
+}
+
+#envBet #win span, #envBet #lose span {
+    display: block;
+    font-size: 15px;
+    width: 120px;
+    overflow: hidden;
+}
+
+#envBet #time {
+    width: 120px;
+    display: flex;
+    -webkit-flex-direction: column; /* Safari */
+    flex-direction: column;
+    justify-content: space-around;
+    -webkit-justify-content: space-around; /* Safari */
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#envBet #time span {
+}
+
 #globalWrap {
     display: block;
     width: 98%;
@@ -122,7 +204,6 @@ button:hover {
 }
 
 #logo {
-    cursor: pointer;
     display: block;
     top: 40px;
     left: 0;
@@ -447,6 +528,11 @@ fieldset legend{
     width: 140px;
     color: #ffffff;
     background-image: none;
+}
+
+.block-action .players p{
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .block-action .players p.current {

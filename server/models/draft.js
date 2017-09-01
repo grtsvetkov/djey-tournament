@@ -127,7 +127,11 @@ DraftModel = {
             data.like[team.name][h] = {};
         }
 
-        data.like[team.name][h][currentPlayer.name] = a;
+        if(data.like[team.name][h][currentPlayer.name] && data.like[team.name][h][currentPlayer.name] == a) {
+            delete data.like[team.name][h][currentPlayer.name];
+        } else {
+            data.like[team.name][h][currentPlayer.name] = a;
+        }
 
         Draft.update({_id: data_id}, {
             $set: {
