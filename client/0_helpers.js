@@ -17,6 +17,15 @@ Template.registerHelper('com_name', function (n) {
     return comName(n);
 });
 
+var levelColors = ['#ffd700', '#cd8032', '#9b9b9b']; //0 - золото, 1 - бронза, 2 - серебро
+
+Template.registerHelper('levelM', function (level) {
+    
+    var s = level.split('-');
+
+    return '<span class="vg_level" style="color:'+levelColors[s[1]]+'">'+s[0]+'</span>';
+});
+
 Template.registerHelper('eq', function (op1, op2) {
     return op1 == op2;
 });

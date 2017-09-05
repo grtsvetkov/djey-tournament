@@ -95,8 +95,6 @@ Template.envStatus.helpers({
     },
 
     'betList': function(bet) {
-        console.log(bet);
-        console.log(Bet.find().fetch());
         return Bet.find({bet: bet}).fetch();
     },
 
@@ -243,6 +241,14 @@ Template.setPlayer.rendered = function () {
 Template.liPlayer.rendered = function () {
     $(this.firstNode).addClass('moved');
 };
+
+Template.liPlayer.events({
+    'click li': function(e){
+        if(!isAdmin()) {
+            window.open('https://vgpro.gg/players/eu/'+e.currentTarget.dataset.name, '_blank');
+        }
+    }
+});
 
 Template.index.rendered = function () {
     if (isAdmin()) {

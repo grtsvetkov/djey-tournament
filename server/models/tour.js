@@ -116,7 +116,7 @@ TourModel = {
             
             _.each(tmp, function(i){
                 if(i.name  && i.vg_id && i.vg_level && i.command > 0) {
-                    Ban.insert({name: i.name, vg_level: i.vg_level, vg_id: i.vg_id, type: 'last_tour'});
+                    Ban.insert({name: i.name, vg_level: String(i.vg_level), vg_id: i.vg_id, type: 'last_tour'});
                 } else {
                     console.log(i);
                 }

@@ -7,6 +7,9 @@
 </head>
 
 <body>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter45848745 = new Ya.Metrika({ id:45848745, clickmap:true, trackLinks:true, accurateTrackBounce:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script>
+<!-- /Yandex.Metrika counter -->
 {{>sAlert}}
 {{>envStatus}}
 </body>
@@ -35,6 +38,7 @@
             <div><a href="https://www.twitch.tv/djey2828" target="_blank">Twitch Djey2828</a></div>
             <div><a href="https://goodgame.ru/channel/djey2828" target="_blank">GoodGame Djey2828</a></div>
             <div><a href="https://discord.gg/h7DNGhV" target="_blank">Discord Djey</a></div>
+            <div><a href="http://www.donationalerts.ru/r/djey2828" target="_blank">Поддержать стримера</a></div>
         </div>
     </div>
     {{>setPlayer}}
@@ -209,7 +213,7 @@
                         {{#if is_admin}}
                         <div data-name="{{name}}" class="remove">&#8635;</div>
                         {{/if}}
-                        {{name}} ({{vg_level}})
+                        {{name}} {{{levelM vg_level}}}
                     </li>
                 {{/each}}
             </ul>
@@ -218,8 +222,8 @@
 </template>
 
 <template name="liPlayer">
-    <li data-id="{{_id}}">
-        <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})
+    <li data-id="{{_id}}" data-name="{{name}}">
+        <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}
     </li>
 </template>
 
@@ -243,7 +247,7 @@
                 {{#with teamList 'A'}}
                     <div class="players">
                         {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
                         {{/each}}
                     </div>
                 {{/with}}
@@ -274,7 +278,7 @@
                 {{#with teamList 'B'}}
                     <div class="players">
                         {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} ({{vg_level}})</p>
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
                         {{/each}}
                     </div>
                 {{/with}}

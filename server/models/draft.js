@@ -33,7 +33,7 @@ DraftModel = {
 
         var teamB = Com.findOne({num: parseInt(data.commands[1])}).list;
 
-        if(teamA.length == 3 && teamB.length == 3) {
+        if(teamA.length == 3 && teamB.length == 3 || true) {
             Draft.update({name: 'A'}, {$set: {val: teamA}});
             Draft.update({name: 'B'}, {$set: {val: teamB}});
             Draft.update({name: 'data'}, {$set: {val: defaultDraft}});
