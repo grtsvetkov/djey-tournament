@@ -1,5 +1,5 @@
 BetModel = {
-    newBet: function() {
+    newBet: function(type) {
 
         if(!ConModel.isAdmin(this.connection.id)) {
             throw new Meteor.Error(9, 'Ошибка авторизации');
@@ -7,8 +7,11 @@ BetModel = {
         }
 
         Bet.remove({});
-        Env.update({name: 'status'}, { $set: {val: '-2'} });
+        
+        Env.update({name: 'status'}, { $set: {val: type} });
+        
         Env.update({name: 'bet'}, { $set: {val: '0'} });
+        
         Env.update({name: 'betTime'}, { $set: {val: '300'} });
     },
 
@@ -47,7 +50,16 @@ BetModel = {
             return;
         }
         
-        Bet.insert({name: player.name, bet: bet});
+        var currentCoin = Djeycoin.findOne({name: player.name});
+
+        if(!currentCoin) {
+            currentCoin = 0;
+            Djeycoin.insert({name: player.name, coin: 0});
+        } else {
+            currentCoin = currentCoin.coin;
+        }
+
+        Bet.insert({name: player.name, bet: bet, currentCoin: currentCoin});
     },
 
     setWinner: function(bet) {
@@ -55,15 +67,27 @@ BetModel = {
             throw new Meteor.Error(9, 'Ошибка авторизации');
             return;
         }
-        
+
+        var betType = Env.findOne({name: 'status'}).val;
+
         var list = Bet.find({bet: bet}).fetch();
 
-        if(list.length > 0) {
+        if (betType == '-2') { //#ПобедаИлиПоражение
+            if(list.length > 0) {
+                var item = list[_.random(0, list.length - 1)];
+                Env.update({name: 'betTime'}, {$set: {val: item.name}});
+            }
+        } else if(betType == '-3') { //#КрасныеИлиСиние
+            if(list.length > 0) {
+                _.each(list, function (i) {
+                    Djeycoin.update({name: i.name}, {$inc: {coin: 1}});
+                    Bet.update({name: i.name}, {$inc: {currentCoin: 1}});
 
-            var item = list[_.random(0, list.length - 1)];
-
-            Env.update({name: 'betTime'}, {$set: {val: item.name}});
+                })
+            }
+            Env.update({name: 'betTime'}, {$set: {val: 'Победили ' + (bet == 'blue' ? 'синие!' : 'красные!')}});
         }
+
         Env.update({name: 'bet'}, { $set: {val: '3'} });
     },
 
@@ -85,6 +109,11 @@ BetModel = {
         Env.update({name: 'status'}, { $set: {val: '0'} });
         Env.update({name: 'bet'}, { $set: {val: '0'} });
         Env.update({name: 'betTime'}, { $set: {val: '300'} });
+    },
+
+    resetDjeyCoin: function() {
+        Bet.remove({});
+        Djeycoin.remove({});
     }
 
 };
@@ -96,5 +125,6 @@ Meteor.methods({
     'bet.setWinner': BetModel.setWinner,
     'bet.setBet': BetModel.setBet,
     'bet.endBet': BetModel.endBet,
-    'bet.stop': BetModel.stop
+    'bet.stop': BetModel.stop,
+    'bet.resetDjeyCoin': BetModel.resetDjeyCoin
 });

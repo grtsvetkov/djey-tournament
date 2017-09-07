@@ -79,6 +79,54 @@ ConModel = {
     unsetName: function (_id) {
         Con.update({_id: _id, con_id: this.connection.id}, {$set: {name: '', command: null, vg_id: '', vg_level: ''}});
 
+        var testCom = Com.find({list: _id}).fetch();
+
+        if(testCom) {
+            _.each(testCom, function(i){
+                if(i && i.list) {
+
+                    var newArr = [];
+
+                    _.each(i.list, function(j){
+                        if(j != _id) {
+                            newArr.push(j);
+                        }
+                    });
+
+                    Com.update({_id: i._id}, {$set: {list: newArr}});
+                }
+            })
+        }
+    },
+
+    deleteName: function(name) {
+        var testCon = Con.find({name: name}).fetch();
+
+        if(testCon) {
+            _.each(testCon, function(con){
+
+                var testCom = Com.find({list: con._id}).fetch();
+
+                if(testCom) {
+                    _.each(testCom, function(i){
+                        if(i && i.list) {
+
+                            var newArr = [];
+
+                            _.each(i.list, function(j){
+                                if(j != con._id) {
+                                    newArr.push(j);
+                                }
+                            });
+
+                            Com.update({_id: i._id}, {$set: {list: newArr}});
+                        }
+                    })
+                }
+
+                Con.remove({_id: con._id});
+            })
+        }
     },
 
     setCommand: function (_id, command) {
@@ -135,7 +183,6 @@ ConModel = {
 
         Con.update({_id: item._id}, {$set: {command: command}});
 
-        console.log({num: parseInt(command)}, {$push: {list: item._id}});
         Com.update({num: parseInt(command)}, {$push: {list: item._id}});
     },
 
@@ -199,6 +246,7 @@ Meteor.methods({
     'con.setPersonalId': ConModel.setPersonalId,
     'con.setName': ConModel.setName,
     'con.unsetName': ConModel.unsetName,
+    'con.deleteName': ConModel.deleteName,
     'con.setCommand': ConModel.setCommand,
     'con.getRandomTo': ConModel.getRandomTo,
     'con.setAdmin': ConModel.setAdmin,

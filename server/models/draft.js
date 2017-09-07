@@ -22,7 +22,6 @@ DraftModel = {
 
         var data = Tour.findOne({tour: parseInt(tour), match: parseInt(match)});
 
-        console.log(tour, match, data);
 
         if (!data || !data.commands || !data.commands.length == 2) {
             throw new Meteor.Error(30, 'Ошибка создания драфта');
@@ -33,7 +32,7 @@ DraftModel = {
 
         var teamB = Com.findOne({num: parseInt(data.commands[1])}).list;
 
-        if(teamA.length == 3 && teamB.length == 3 || true) {
+        if(teamA.length == 3 && teamB.length == 3) {
             Draft.update({name: 'A'}, {$set: {val: teamA}});
             Draft.update({name: 'B'}, {$set: {val: teamB}});
             Draft.update({name: 'data'}, {$set: {val: defaultDraft}});
@@ -63,6 +62,11 @@ DraftModel = {
             return;
         }
 
+        if (ConModel.isAdmin(this.connection.id)) { //ЭТО АДМИНИСТРАТОР
+            DraftModel._pick(data_id, data, h);
+            return;
+        }
+
         var team = Draft.findOne({'val': currentPlayer._id});
 
         if (data.currentTeam != team.name) { //Не подходит команда
@@ -75,6 +79,10 @@ DraftModel = {
             return;
         }
 
+        DraftModel._pick(data_id, data, h);
+    },
+
+    _pick: function(data_id, data, h) {
         if (data.pick.indexOf(h) <= -1 && data.ban.indexOf(h) <= -1) {
 
             var action = actionByStep[data.currentStep];

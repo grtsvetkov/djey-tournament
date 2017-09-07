@@ -23,14 +23,28 @@
                         {{.}}
                     {{else}}
                         VainGlory турнир от Djey
-                    {{/with}}
-                    {{#if is_admin}}
-                        <button id="newTour">Новый турнир</button>
-                        <button id="newBet">Новые ставки</button>
+                    {{/with}}<br/>
+                    {{#if is_player}}
+                        <button id="showDjeycoin">Мои DjeyCoin</button>
                     {{/if}}
                 </span>
             </div>
+            <div id="banner">
+                <script type="text/javascript">
+                    var begun_auto_pad = 464665398;
+                    var begun_block_id = 464665854;
+                </script>
+                <script src="//autocontext.begun.ru/autocontext2.js" type="text/javascript"></script>
+            </div>
             {{>yield}}
+            <div id="adminPanel">
+                {{#if is_admin}}
+                    <button id="newTour">Новый турнир</button>
+                    <button id="newBetWinLose">#ПобедаИлиПоражение</button>
+                    <button id="newBetRedBlue">#КрасныеИлиСиние</button>
+                    <button id="randomDjeycoin">Чемпион по DjeyCoin</button>
+                {{/if}}
+            </div>
         </div>
         <div id="footer">
             <div><a href="https://vk.com/djeyclub" target="_blank">VK Vainglory с Djey</a></div>
@@ -46,59 +60,20 @@
 
 <template name="envStatus">
     {{#with status}}
-        {{consoleLog .}}
-        {{#if eq . '-1'}}
-            {{>dbd}}
+        {{#if eq . '-1'}} {{! #Драфт}}
+            {{>_draft}}
         {{else}}
-            {{#if eq . '-2'}}
-                <div id="envBet">
-                    <div class="betTitle">Делаем ставки</div>
-                    <div class="betWrap">
-                        {{#with bet}}
-                            <div id="win">
-                                <span>На победу</span>
-                                {{#if is_admin}}
-                                    <div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>
-                                {{else}}
-                                    {{#if eq betStatus '1'}}
-                                        <div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>
-                                    {{/if}}
-                                {{/if}}
-                                {{#each betList 'win'}}
-                                    <span>{{name}}</span>
-                                {{/each}}
-                            </div>
-                            <div id="time">
-                                {{#if is_admin}}
-                                    {{#if eq betStatus '0'}}
-                                        <button id="startBet">Старт</button>
-                                    {{/if}}
-                                {{/if}}
-                                <span>{{{time}}}</span>
-                                {{#if is_admin}}
-                                    <button id="stopBet">Стоп</button>
-                                {{/if}}
-                            </div>
-                            <div id="lose">
-                                <span>На поражение</span>
-                                {{#if is_admin}}
-                                    <div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>
-                                {{else}}
-                                    {{#if eq betStatus '1'}}
-                                        <div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>
-                                    {{/if}}
-                                {{/if}}
-                                {{#each betList 'lose'}}
-                                    <span>{{name}}</span>
-                                {{/each}}
-                            </div>
-                        {{/with}}
-                    </div>
-                </div>
+            {{#if eq . '-2'}} {{! #ПобедаИлиПоражение}}
+                {{>_bet envStatus=.}}
             {{else}}
-                <div id="envStatus">
-                    {{{.}}}
-                </div>
+                {{#if eq . '-3'}} {{! #КраснаяИлиСиняя}}
+                    {{>_bet envStatus=.}}
+                {{else}} {{! Кто-то победил в турнире}}
+                    <div id="envStatus">
+                        {{{.}}}
+                        <p class="close">Закрыть</p>
+                    </div>
+                {{/if}}
             {{/if}}
         {{/if}}
     {{/with}}
@@ -124,47 +99,65 @@
                         {{#each match in tour}}
                             <div class="match">
                                 {{#if is_admin}}
-                                    <button data-tour="{{match.tour}}" data-match="{{match.match}}" class="draft">D</button>
+                                    {{#if eq match.commands.length 2}}
+                                        <button data-tour="{{match.tour}}" data-match="{{match.match}}" class="draft">D</button>
+                                    {{/if}}
                                 {{/if}}
                                 <div class="inline">
-                                    <div class="command">
+                                    <div class="command commandItem">
                                         {{#if match.commands.[0]}}
-                                            <span>
-                                                <div class="online {{command_status match.commands.[0]}}"></div>
-                                                {{com_name match.commands.[0]}}
-                                            </span>
-                                            {{#if is_admin}}
-                                                {{#if eq match.status 0}}
-                                                    {{#if eq match.commands.length 2}}
-                                                        <button class="commandIsWin"
-                                                                data-commands="{{match.commands}}"
-                                                                data-tour="{{match.tour}}"
-                                                                data-match="{{match.match}}"
-                                                                data-win="{{match.commands.[0]}}">W
-                                                        </button>
+                                            <div class="commandName">
+                                                <span class="{{#if eq match.tour 1}}addRondomTo{{/if}}" data-key="{{match.commands.[0]}}">
+                                                    <div class="online {{command_status match.commands.[0]}}"></div>
+                                                    {{com_name match.commands.[0]}}
+                                                </span>
+                                                {{#if is_admin}}
+                                                    {{#if eq match.tour 1}}<span class="edit" data-key="{{match.commands.[0]}}">&#9998;</span>{{/if}}
+                                                    {{#if eq match.status 0}}
+                                                        {{#if eq match.commands.length 2}}
+                                                            <button class="commandIsWin"
+                                                                    data-commands="{{match.commands}}"
+                                                                    data-tour="{{match.tour}}"
+                                                                    data-match="{{match.match}}"
+                                                                    data-win="{{match.commands.[0]}}">W
+                                                            </button>
+                                                        {{/if}}
                                                     {{/if}}
                                                 {{/if}}
-                                            {{/if}}
+                                            </div>
+                                            <ul data-key="{{match.commands.[0]}}" id="commandItem{{.}}" class="playerList {{#if eq match.tour 1}}commandListUL connectedSortable{{/if}}">
+                                                {{#each command_player match.commands.[0]}}
+                                                    {{>liPlayer}}
+                                                {{/each}}
+                                            </ul>
                                         {{/if}}
                                     </div>
-                                    <div class="command">
+                                    <div class="command commandItem">
                                         {{#if match.commands.[1]}}
-                                            <span>
-                                                <div class="online {{command_status match.commands.[1]}}"></div>
-                                                {{com_name match.commands.[1]}}
-                                            </span>
-                                            {{#if is_admin}}
-                                                {{#if eq match.status 0}}
-                                                    {{#if eq match.commands.length 2}}
-                                                        <button class="commandIsWin"
-                                                                data-commands="{{match.commands}}"
-                                                                data-tour="{{match.tour}}"
-                                                                data-match="{{match.match}}"
-                                                                data-win="{{match.commands.[1]}}">W
-                                                        </button>
+                                            <div class="commandName">
+                                                <span class="{{#if eq match.tour 1}}addRondomTo{{/if}}" data-key="{{match.commands.[1]}}">
+                                                    <div class="online {{command_status match.commands.[1]}}"></div>
+                                                    {{com_name match.commands.[1]}}
+                                                </span>
+                                                {{#if is_admin}}
+                                                    {{#if eq match.tour 1}}<span class="edit" data-key="{{match.commands.[1]}}">&#9998;</span>{{/if}}
+                                                    {{#if eq match.status 0}}
+                                                        {{#if eq match.commands.length 2}}
+                                                            <button class="commandIsWin"
+                                                                    data-commands="{{match.commands}}"
+                                                                    data-tour="{{match.tour}}"
+                                                                    data-match="{{match.match}}"
+                                                                    data-win="{{match.commands.[0]}}">W
+                                                            </button>
+                                                        {{/if}}
                                                     {{/if}}
                                                 {{/if}}
-                                            {{/if}}
+                                            </div>
+                                            <ul data-key="{{match.commands.[1]}}" id="commandItem{{.}}" class="playerList {{#if eq match.tour 1}}commandListUL connectedSortable{{/if}}">
+                                                {{#each command_player match.commands.[1]}}
+                                                    {{>liPlayer}}
+                                                {{/each}}
+                                            </ul>
                                         {{/if}}
                                     </div>
                                 </div>
@@ -190,21 +183,6 @@
                 {{/with}}
             </div>
         </div>
-        <ul id="commandList" class="row">
-            {{#each command_list}}
-                <li class="commandItem connectedSortable">
-                    <p class="addRondomTo" data-key="{{.}}">
-                        {{com_name .}}
-                        {{#if is_admin}}<span class="edit">&#9998;</span>{{/if}}
-                    </p>
-                    <ul data-key="{{.}}" id="commandItem{{.}}" class="commandListUL connectedSortable">
-                        {{#each command_player .}}
-                            {{>liPlayer}}
-                        {{/each}}
-                    </ul>
-                </li>
-            {{/each}}
-        </ul>
         <fieldset>
             <legend>Участники прошлого турнира</legend>
             <ul id="lastList" class="row">
@@ -222,7 +200,7 @@
 </template>
 
 <template name="liPlayer">
-    <li data-id="{{_id}}" data-name="{{name}}">
+    <li data-id="{{_id}}" data-name="{{name}}" class="{{isMe}}">
         <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}
     </li>
 </template>
@@ -232,62 +210,6 @@
         <div id="mainBlock" class="row">
             <input type="password" id="authPassword">
             <button id="authSend">Auth</button>
-        </div>
-    </div>
-</template>
-
-<template name="dbd">
-    <div id="dbd">
-        {{#if is_admin}}
-            <button id="closeDBD">Закрыть драфт</button>
-        {{/if}}
-        <div class="wrap">
-
-            <div class="block-action teamA">
-                {{#with teamList 'A'}}
-                    <div class="players">
-                        {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
-                        {{/each}}
-                    </div>
-                {{/with}}
-                <div id="action-step0" class="ban" style="{{styleStep 0}}"></div>
-                <div id="action-step2" class="pick" style="{{styleStep 2}}"></div>
-                <div id="action-step5" class="ban" style="{{styleStep 5}}"></div>
-                <div id="action-step7" class="pick" style="{{styleStep 7}}"></div>
-                <div id="action-step8" class="pick" style="{{styleStep 8}}"></div>
-            </div>
-
-            <div id="heroesIcons">
-                {{#each heroes}}
-                    <div class="{{class}} heroSelector" data-name="{{name}}"
-                         style="background-image: url('/img/{{name}}.gif')">
-                        <div class="likeSelected">
-                            {{#each likes}}
-                                <span><img src="/css/images/{{action}}.png"> {{name}}</span>
-                            {{/each}}
-                        </div>
-                        <div class="likeSelector hidden">
-                            <img data-action="like" data-name="{{name}}" src="/css/images/like.png">
-                            <img data-action="dislike" data-name="{{name}}" src="/css/images/dislike.png">
-                        </div>
-                    </div>{{/each}}
-            </div>
-
-            <div class="block-action teamB">
-                {{#with teamList 'B'}}
-                    <div class="players">
-                        {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
-                        {{/each}}
-                    </div>
-                {{/with}}
-                <div id="action-step1" class="ban" style="{{styleStep 1}}"></div>
-                <div id="action-step3" class="pick" style="{{styleStep 3}}"></div>
-                <div id="action-step4" class="ban" style="{{styleStep 4}}"></div>
-                <div id="action-step6" class="pick" style="{{styleStep 6}}"></div>
-                <div id="action-step9" class="pick" style="{{styleStep 9}}"></div>
-            </div>
         </div>
     </div>
 </template>

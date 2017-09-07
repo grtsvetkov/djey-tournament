@@ -21,7 +21,7 @@ var levelColors = ['#ffd700', '#cd8032', '#9b9b9b']; //0 - золото, 1 - б�
 
 Template.registerHelper('levelM', function (level) {
     
-    var s = level.split('-');
+    var s = level ? level.split('-'): ['0','0'];
 
     return '<span class="vg_level" style="color:'+levelColors[s[1]]+'">'+s[0]+'</span>';
 });

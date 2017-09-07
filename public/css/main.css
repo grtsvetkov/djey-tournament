@@ -8,8 +8,10 @@ body, html {
     height: 100%;
     opacity: 1;
     visibility: visible;
-    background: url('images/background.png') no-repeat, no-repeat #000000;
+    background: url('images/background.png') no-repeat center center fixed;
     -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
     min-width: 1000px;
     font-family: SANS-SERIF;
@@ -24,7 +26,7 @@ ul {
 
 li {
     overflow: hidden;
-    width: 250px;
+    white-space: nowrap;
     padding: 0;
     margin: 0;
     text-align: left;
@@ -32,8 +34,12 @@ li {
     color: #000000;
     font-size: 18px;
     line-height: 25px;
-    cursor: default;
+    cursor: pointer;
     border-bottom: 1px solid #d9daa8;
+}
+
+li.isMe {
+    background: rgba(4, 0, 255, 0.3) !important;
 }
 
 li.moved {
@@ -102,6 +108,14 @@ button:hover {
     font-weight: bold;
 }
 
+span.blue {
+    color: #62cef4;
+}
+
+span.red {
+    color: #f65b47;
+}
+
 #envStatus {
     position: absolute;
     z-index: 1;
@@ -118,13 +132,36 @@ button:hover {
     box-shadow: 0 0 50px 40px rgba(0,0,0,1);
 }
 
-#envBet {
+#envStatus p.close{
     position: absolute;
-    z-index: 1;
+    bottom: 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#envBet {
     top: 150px;
-    width: 400px;
-    height: 400px;
-    margin-left: 30%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    width: 90%;
+    min-width: 650px;
+    height: 500px;
+    padding-right: 250px;
+    box-sizing: border-box;
+    margin-left: auto;
+    min-width: 650px;
+    margin-right: auto;
+}
+
+#envBetWrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 650px;
+    height: 500px;
+    margin: auto;
     background: #000000;
     color: #ffffff;
     font-size: 25px;
@@ -133,61 +170,52 @@ button:hover {
     box-shadow: 0 0 50px 40px rgba(0,0,0,1);
 }
 
-#envBet .betTitle {
+#envBet #betTitle {
     display: block;
     height: auto;
-    width: 360px;
+    width: 100%;
     padding-bottom: 15px;
 }
 
-#envBet .betWrap {
+#envBet #envBetContent {
     display: -webkit-flex; /* Safari */
     display: flex;
     justify-content: space-between;
     -webkit-justify-content: space-between; /* Safari */
 }
 
-#envBet .betWrap div {
+#envBetContent .betList {
     margin: 0;
     padding: 0;
-    width: 120px;
+    width: 250px;
     height: 400px;
     overflow-y: hidden;
 }
 
+#envBetContent .betList span{
+    display: block;
+    font-size: 15px;
+    overflow: hidden;
+}
 
-#envBet div .bet{
+#envBetContent .bet{
     cursor: pointer;
     margin: 0;
     margin-bottom: 20px !important;
     padding: 0;
-    width: 120px;
     font-size: 14px;
     height: auto;
 }
 
-#envBet div .bet img{
+#envBetContent .bet img{
     display: inline-block;
-    height: 20px;
+    height: 25px;
     border-radius: 6px;
+    vertical-align: middle;
 }
 
-#envBet #win{
-
-}
-
-#envBet #lose{
-}
-
-#envBet #win span, #envBet #lose span {
-    display: block;
-    font-size: 15px;
-    width: 120px;
-    overflow: hidden;
-}
-
-#envBet #time {
-    width: 120px;
+#envBetContent #time {
+    width: 150px;
     display: flex;
     -webkit-flex-direction: column; /* Safari */
     flex-direction: column;
@@ -197,8 +225,6 @@ button:hover {
     font-size: 14px;
 }
 
-#envBet #time span {
-}
 
 #globalWrap {
     display: block;
@@ -235,6 +261,16 @@ button:hover {
     font-weight: 600;
 }
 
+#banner {
+    position: absolute;
+    border: 1px solid black;
+    top: 15px;
+    right: 5px;
+    width: 468px;
+    height: 60px;
+    background-color: rgba(206, 205, 211, 0.8);
+}
+
 #footer {
     position: absolute;
     left: 0;
@@ -252,7 +288,8 @@ button:hover {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    padding-top: 40px;
+    padding-top: 35px;
+    vertical-align: middle;
 }
 
 .online {
@@ -275,7 +312,6 @@ button:hover {
 }
 
 #mainBlock {
-    height: 400px;
     display: -webkit-flex; /* Safari */
     display: flex;
     justify-content: space-between;
@@ -286,11 +322,12 @@ button:hover {
     position: relative;
     display: inline-block;
     width: 100%;
-    height: 400px;
+    height: 100%;
     background-color: rgba(255, 255, 255, 0.4);
     vertical-align: middle;
     text-align: center;
     border-radius: 7px 0 0 7px;
+    color: #ffffff;
 }
 
 #commandTable .wrap {
@@ -300,7 +337,7 @@ button:hover {
 }
 
 #commandTable .tour {
-    width: 30%;
+    width: 31%;
     display: inline-block;
     vertical-align: middle;
     position: relative;
@@ -308,8 +345,9 @@ button:hover {
 
 #commandTable .tour .match {
     margin: 23px;
+    margin-left: 0;
     width: 100%;
-    max-width: 160px;
+    max-width: 200px;
     position: relative;
 }
 
@@ -321,8 +359,8 @@ button:hover {
 #commandTable .tour .match button.draft {
     position: absolute;
     display: inline-block;
-    height: 75px;
-    vertical-align: top;
+    height: 50%;
+    margin-top: 25%;
     font-size: 11px;
     padding: 2px;
 }
@@ -332,19 +370,46 @@ button:hover {
     width: 100%;
     min-width: 140px;
     min-height: 30px;
-    margin: 4px;
+    margin: 7px;
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 7px;
     font-size: 14px;
+}
 
+#commandTable .tour .match .command .commandName {
     display: -webkit-flex; /* Safari */
     display: flex;
     justify-content: space-between;
     -webkit-justify-content: space-between; /* Safari */
 }
 
-#commandTable .tour .match .command span {
-    color: #FFFFFF;
+#commandTable .tour .match .command .commandName .edit {
+    color: rgba(255, 218, 214, 0.7);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+
+#commandTable .tour .match .command .playerList {
+    min-height: 30px;
+    background-color: rgba(220, 220, 220, 0.4);
+    border-radius: 0 0 7px 7px;
+    padding-bottom: 3px;
+}
+
+#commandTable .tour .match .command .playerList li{
+    color: #ffffff;
+    border-top: 1px solid #d9daa8;
+    border-bottom: none;
+    font-size: 15px;
+    background: none;
+}
+
+#commandTable .tour .match .command .playerList li .online {
+    margin-left: 10px;
+}
+
+#commandTable .tour .match .command .commandName span {
     text-align: left;
     line-height: 30px;
     padding-left: 10px;
@@ -361,7 +426,6 @@ button:hover {
     position:relative;
     display: inline-block;
     width: 250px;
-    height: 400px;
     margin: 0;
     background-color: rgba(255, 255, 255, 0.7);
 }
@@ -385,52 +449,6 @@ button:hover {
 #statInfo {
     position: absolute;
     bottom: 0;
-}
-
-#commandList {
-    text-align: left;
-    display: -webkit-flex; /* Safari */
-    display: flex;
-    justify-content: space-between;
-    -webkit-justify-content: space-between; /* Safari */
-}
-
-li.commandItem {
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.7);
-    display: inline-block;
-    width: 10%;
-    height: 150px;
-    text-align: center;
-    line-height: normal;
-    vertical-align: top;
-    margin-top: 30px;
-}
-
-li.commandItem ul {
-    height: 150px;
-    margin-top: 10px;
-}
-
-li.commandItem p {
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: rgba(255, 218, 214, 0.7);
-    padding: 5px;
-    font-size: 17px;
-    text-align: center;
-    margin: 0;
-    position: relative;
-}
-
-li.commandItem p span.edit {
-    position: absolute;
-    top: 0;
-    right: 12px;
-    color: rgba(255, 218, 214, 0.7);
-    cursor: pointer;
-    width: 17px;
-    height: 17px;
 }
 
 .no-close .ui-dialog-titlebar-close {
@@ -464,6 +482,13 @@ fieldset legend{
     padding-right: 3px;
 }
 
+#adminPanel {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-evenly;
+    -webkit-justify-content: space-evenly; /* Safari */
+    margin: 20px auto;
+}
 
 
 

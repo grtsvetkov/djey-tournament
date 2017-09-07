@@ -5,6 +5,13 @@ Meteor.startup(function(){
         Env.insert({name: 'password', val: '123'});
     }
 
+    /*
+    0 = Турнир
+    -1 = Драфт
+    -2 = Ставки #ПобедаИлиПоражение
+    -3 = Стаки #КраснаяИлиСиняя
+    Что-то другое = Победа какой-то комманды в турнире
+     */
     var flag = Env.findOne({name: 'status'});
 
     if(!flag) {

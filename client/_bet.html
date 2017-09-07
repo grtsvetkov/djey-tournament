@@ -1,0 +1,60 @@
+<template name="_bet">
+    <div id="envBet">
+        <div id="envBetWrap">
+            <div id="betTitle">
+                Ставки&#160;
+                {{#if eq envStatus '-2'}}#<span class="blue">Победа</span>Или<span class="red">Поражение</span>{{/if}}
+                {{#if eq envStatus '-3'}}#<span class="blue">Синие</span>Или<span class="red">Красные</span>{{/if}}
+            </div>
+            <div id="envBetContent">
+                {{#with bet}}
+                    <div class="betList">
+                        <div class="stats">{{{stat 0}}}</div>
+                        {{#if eq envStatus '-2'}}<span>На победу</span>{{/if}}
+                        {{#if eq envStatus '-3'}}<span>На синих</span>{{/if}}
+                        {{#if is_admin}}
+                            {{#if eq envStatus '-2'}}<div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>{{/if}}
+                            {{#if eq envStatus '-3'}}<div class="bet" data-bet="blue"><img src="/css/images/blue_coin.png" alt="СИНИЕ"> СИНИЕ</div>{{/if}}
+                        {{else}}
+                            {{#if eq betStatus '1'}}
+                                {{#if eq envStatus '-2'}}<div class="bet" data-bet="win"><img src="/css/images/like.png" alt="ПОБЕДА"> ПОБЕДА</div>{{/if}}
+                                {{#if eq envStatus '-3'}}<div class="bet" data-bet="blue"><img src="/css/images/blue_coin.png" alt="СИНИЕ"> СИНИЕ</div>{{/if}}
+                            {{/if}}
+                        {{/if}}
+                        {{#each betList 0}}
+                            <span>{{name}} ({{currentCoin}})</span>
+                        {{/each}}
+                    </div>
+                    <div id="time">
+                        {{#if is_admin}}
+                            {{#if eq betStatus '0'}}
+                                <button id="startBet">Старт</button>
+                            {{/if}}
+                        {{/if}}
+                        <span>{{{time}}}</span>
+                        {{#if is_admin}}
+                            <button id="stopBet">Стоп</button>
+                        {{/if}}
+                    </div>
+                    <div class="betList">
+                        <div class="stats">{{{stat 1}}}</div>
+                        {{#if eq envStatus '-2'}}<span>На поражение</span>{{/if}}
+                        {{#if eq envStatus '-3'}}<span>На красных</span>{{/if}}
+                        {{#if is_admin}}
+                            {{#if eq envStatus '-2'}}<div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>{{/if}}
+                            {{#if eq envStatus '-3'}}<div class="bet" data-bet="red"><img src="/css/images/red_coin.png" alt="СИНИЕ"> КРАСНЫЕ</div>{{/if}}
+                        {{else}}
+                            {{#if eq betStatus '1'}}
+                                {{#if eq envStatus '-2'}}<div class="bet" data-bet="lose"><img src="/css/images/dislike.png" alt="ПОРАЖЕНИЕ"> ПОРАЖЕНИЕ</div>{{/if}}
+                                {{#if eq envStatus '-3'}}<div class="bet" data-bet="red"><img src="/css/images/red_coin.png" alt="СИНИЕ"> КРАСНЫЕ</div>{{/if}}
+                            {{/if}}
+                        {{/if}}
+                        {{#each betList 1}}
+                            <span>{{name}} ({{currentCoin}})</span>
+                        {{/each}}
+                    </div>
+                {{/with}}
+            </div>
+        </div>
+    </div>
+</template>

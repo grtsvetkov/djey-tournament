@@ -1,22 +1,22 @@
 //https://lyra.vgpro.gg/matches/eu/djeyclub/all/
 
+/*
+ 468 × 60
+ <script type="text/javascript">
+ var begun_auto_pad = 464665398;
+ var begun_block_id = 464665854;
+ </script>
+ <script src="//autocontext.begun.ru/autocontext2.js" type="text/javascript"></script>
+ код бегуна
+ */
+
 const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
 const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
-const playerByStep = [0, 0, 0, 0, 0, 0, 1, 1, 2, 2];
 
 var heroes = ['reza', 'grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
     'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
     'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
 ];
-
-Template.AppLayout.helpers({
-    'name': function () {
-        var val = Env.findOne({name: 'name'});
-
-        return val && val.name ? val.val : null;
-    }
-});
-
 
 var commandSort = function() {
     $('.commandListUL').each(function(){
@@ -27,8 +27,21 @@ var commandSort = function() {
         });
 
         Meteor.call('con.setCommandListSort', command, list);
-    })
+    });
 };
+
+Template.AppLayout.helpers({
+    'name': function () {
+        var val = Env.findOne({name: 'name'});
+
+        return val && val.name ? val.val : null;
+    },
+
+    'is_player': function () {
+        return Con.findOne({_id: localStorage.getItem('myPersonalId'), name: {$exists: true}});
+    }
+});
+
 
 Template.AppLayout.events({
     'click #newTour': function (e) {
@@ -63,144 +76,130 @@ Template.AppLayout.events({
         return false;
     },
     
-    'click #newBet': function (e) {
-        e.preventDefault();
-        
-        Meteor.call('bet.newBet', function (err) {
+    'click #newBetWinLose': function (e) {
+        //type = -2 : #ПобедаИлиПоражение
+        Meteor.call('bet.newBet', '-2', function (err) {
             if (err) {
                 console.log(err);
                 sAlert.error(err.reason);
             }
         });
+    },
 
-        return false;
+    'click #newBetRedBlue': function (e) {
+        //type = -3 : #КраснаяИлиСиняя
+        Meteor.call('bet.newBet', '-3', function (err) {
+            if (err) {
+                console.log(err);
+                sAlert.error(err.reason);
+            }
+        });
+    },
+    
+    'click #randomDjeycoin': function(){
+
+        var max = Djeycoin.findOne({}, {sort: {coin: -1}});
+
+        max = max && max.coin ? max.coin : 0;
+
+        var list = Djeycoin.find({coin: max}).fetch();
+
+        if(list.length > 0) {
+            var item = list[_.random(0, list.length - 1)];
+            var msg = _.map(list, function(i){
+                return i.name;
+            })
+        } else {
+            sAlert.error('Не найдено чемпионов по Djeycoin');
+            return;
+        }
+
+        var diag = $(`
+            <div id="myDialog" title="Чемпион по DjeyCoin!">
+                <p>Поздравляем следующих победителей!</p>
+                <p>`+msg.join(', ')+`</p>
+                <p>Случайным победителем выбран `+item.name+`!</p>
+            </div>`);
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Сбросить все DjeyCoin': function () {
+                    Meteor.call('bet.resetDjeyCoin', function (err) {
+                        if (err) {
+                            console.log(err);
+                            sAlert.error(err.reason);
+                        }
+                        diag.dialog('close');
+                        diag.remove();
+                    });
+                },
+                'Закрыть': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+    },
+
+    'click #showDjeycoin': function() {
+
+        var player = Con.findOne({_id: localStorage.getItem('myPersonalId'), name: {$exists: true}});
+
+        if(!player || !player.name) {
+            return;
+        }
+
+        var coin = Djeycoin.findOne({name: player.name});
+
+        coin = (!coin || !coin.coin) ? 0: coin.coin;
+
+        var diag = $(`
+            <div id="myDialog" title="Мои DjeyCoin">
+                <span id="dialogMsg">На данный момент у Вас <strong>`+coin+`</strong> Djeycoin </span>
+            </div>`);
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Хорошо': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
     }
 });
 
 Template.envStatus.helpers({
     'status': function () {
-        var val = Env.findOne({name: 'status'});
+        /*
+         0 = Турнир
+         -1 = Драфт
+         -2 = Ставки #ПобедаИлиПоражение
+         -3 = Стаки #КраснаяИлиСиняя
+         Что-то другое = Победа какой-то комманды в турнире
+         */
 
+        var val = Env.findOne({name: 'status'});
+        
         if (val) {
             if (val.val == '0') {
                 return;
-            } else if(val.val == '-1') {
-                return val.val;
-            } else if(val.val == '-2') {
+            } else if(val.val == '-1' || val.val == '-2' || val.val == '-3') {
                 return val.val;
             } else {
                 return 'Турнир окончен.<br> Победа за <strong>' + comName(val.val) + '</strong>!';
             }
         }
-    },
-
-    'betList': function(bet) {
-        return Bet.find({bet: bet}).fetch();
-    },
-
-    'bet': function() {
-
-        var status = Env.findOne({name: 'bet'});
-        var time = Env.findOne({name: 'betTime'});
-
-        if(status.val != 3) {
-
-            time = !time ? 0 : parseInt(time.val);
-
-            var min = Math.floor(time / 60);
-            var sec = time - min * 60;
-
-            if (sec < 10) {
-                sec = '0' + sec;
-            }
-
-            time = min + ':' + sec;
-        } else {
-            time = 'Победитель:<br>'+ time.val + '!';
-        }
-
-        return {betStatus: status.val, time: time};
     }
 });
 
-
-var betInterval = false, betTime;
-
 Template.envStatus.events({
-
-    'click #startBet': function(e) {
-
-        betTime = 300;
-
-        Meteor.call('bet.start', function (err) {
-            if (err) {
-                console.log(err);
-                sAlert.error(err.reason);
-            } else {
-                betInterval = setInterval(function(){
-
-                    betTime--;
-
-                    Meteor.call('bet.setTime', betTime, function(err){
-                        if (err) {
-                            console.log(err);
-                            sAlert.error(err.reason);
-                        }
-                    });
-
-                    if(betTime < 1) {
-                        clearInterval(betInterval);
-                        Meteor.call('bet.endBet', function(err){
-                            if (err) {
-                                console.log(err);
-                                sAlert.error(err.reason);
-                            }
-                        });
-                    }
-                }, 1000);
-            }
-        });
-    },
-
-    'click .bet': function(e) {
-        var bet = e.currentTarget.dataset.bet;
-
-        if(isAdmin()) {
-            clearInterval(betInterval);
-            Meteor.call('bet.setWinner', bet, function(err){
-                if (err) {
-                    console.log(err);
-                    sAlert.error(err.reason);
-                }
-            });
-        } else {
-
-            var player = Con.findOne({_id: localStorage.getItem('myPersonalId')});
-
-            if (!player || !player.name) {
-                sAlert.error('Нажмите кнопку "Принять участие", что бы делать ставки');
-                return;
-            }
-
-            Meteor.call('bet.setBet', bet, function(err){
-                if (err) {
-                    console.log(err);
-                    sAlert.error(err.reason);
-                }
-            });
-        }
-    },
-
-
-    'click #stopBet': function(e) {
-        Meteor.call('bet.stop', function (err) {
-            if (err) {
-                console.log(err);
-                sAlert.error(err.reason);
-            } else {
-                clearInterval(betInterval);
-            }
-        });
+    'click p.close': function() {
+        $('#envStatus').remove();
     }
 });
 
@@ -240,9 +239,48 @@ Template.setPlayer.rendered = function () {
 
 Template.liPlayer.rendered = function () {
     $(this.firstNode).addClass('moved');
+    $('#conList ul').height($('#commandTable').height() - 150);
 };
 
+Template.liPlayer.helpers({
+    'isMe': function() {
+        return this._id == localStorage.getItem('myPersonalId') ? 'isMe' : '';
+    }
+});
+
 Template.liPlayer.events({
+
+    'dblclick li': function(e){
+
+        if(isAdmin()) {
+            var name = e.currentTarget.dataset.name;
+
+            var diag = $('<div id="myDialog" title="Выкинуть игрока?">Вы действительно выкинуть <strong>'+name+'</strong>?</div>');
+            diag.dialog({
+                autoOpen: false,
+                modal: true,
+                buttons: {
+                    'Да, выкинуть его': function () {
+                        Meteor.call('con.deleteName', name, function (err) {
+                            if (err) {
+                                console.log(err);
+                                sAlert.error(err.reason);
+                            }
+                        });
+
+                        diag.dialog('close');
+                        diag.remove();
+                    },
+                    'Отмена': function () {
+                        diag.dialog('close');
+                        diag.remove();
+                    }
+                }
+            });
+            diag.dialog('open');
+        }
+    },
+
     'click li': function(e){
         if(!isAdmin()) {
             window.open('https://vgpro.gg/players/eu/'+e.currentTarget.dataset.name, '_blank');
@@ -388,10 +426,10 @@ Template.index.events({
         diag.dialog('open');
     },
 
-    'click .addRondomTo .edit': function (e) {
+    'click .edit': function (e) {
         e.preventDefault();
 
-        var key = $(e.currentTarget).parent().data('key');
+        var key = e.currentTarget.dataset.key;
 
         var diag = $(`
             <div id="myDialog" title="Переименовать команду">
@@ -556,172 +594,6 @@ Template.signin.events({
                 Router.go('/');
             }
         })
-    }
-});
-
-Template.dbd.helpers({
-
-    'teamList': function(team) {
-
-        var data = Draft.findOne({name: 'data'});
-
-        if (!data || !data.val ) {
-            return;
-        }
-        
-        var currentTeam = data.val.currentTeam;
-        var currentPlayer = data.val.currentPlayer;
-
-        var teamIds = Draft.findOne({name: team});
-        
-        if(!teamIds) {
-            return;
-        }
-        
-        var list = [];
-        
-        _.each(teamIds.val, function(i, key){
-            var player = Con.findOne({_id: i});
-            if(currentTeam == team && currentPlayer == key) {
-                player.isCurrent = true;
-            }
-            
-            list.push(player);
-        });
-
-        return list;
-    },
-    
-    'heroes': function () {
-
-        var data = Draft.findOne({name: 'data'});
-        var steps = [];
-
-        if (data && data.val && data.val.steps) {
-            steps = data.val.steps;
-        }
-
-        var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
-
-        if(!team) {
-            return _.map(heroes, function (i) {
-                return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : ''};
-            });
-        } else {
-            return _.map(heroes, function (i) {
-                
-                var likes = [];
-                
-                if(data.val.like[team.name][i]) {
-                    likes = _.map(data.val.like[team.name][i], function(action, name){
-                        return {name: name, action: action};
-                    })
-                }
-                
-                return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : '', 'likes': likes};
-            });
-        }
-    },
-
-    'styleStep': function (n) {
-        var data = Draft.findOne({name: 'data'});
-
-        if (data && data.val) {
-            if (data.val.currentStep == n) {
-                var color = teamByStep[n] == 'A' ? '#63D1F4' : '#FBA16C';
-                return 'background-color: ' + color;
-            } else if (data.val.steps && data.val.steps[n]) {
-                if (actionByStep[n] == 'ban') {
-                    var back = teamByStep[n] == 'A' ? 'blueban' : 'orangeban';
-                    return 'background-image: url(\'/css/' + back + '.png\'), url(\'/img/' + data.val.steps[n] + '.gif\'); background-position: center, center; background-repeat: no-repeat;';
-                } else {
-                    return 'background-image: url(\'/img/' + data.val.steps[n] + '.gif\');';
-                }
-            }
-        }
-    }
-});
-
-var selectHeroes = function(e) {
-    var h = e.currentTarget.dataset.name;
-    var data = Draft.findOne({name: 'data'});
-    var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
-
-    if(!team) {
-        sAlert.error('Ошибка авторизации!');
-        return;
-    }
-
-    if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
-        if (data.val.steps && data.val.steps.indexOf(h) <= -1) {
-            Meteor.call('draft.step', h, function (err) {
-                if (err) {
-                    console.log(err);
-                    sAlert.error(err.reason);
-                }
-            })
-        } else {
-            sAlert.error('Герой уже был выбран ранее');
-        }
-    } else {
-        sAlert.error('Сейчас не Ваш ход');
-    }
-};
-
-var dblClickDetector = false;
-
-Template.dbd.events({
-
-    'click #closeDBD': function() {
-        Meteor.call('draft.close');
-    },
-
-    'click .likeSelector img, touchend .likeSelector img': function(e) {
-
-        e.preventDefault();
-
-        var _myId = localStorage.getItem('myPersonalId');
-
-        if(!_myId) {
-            return;
-        }
-
-        var h = e.currentTarget.dataset.name;
-        var a = e.currentTarget.dataset.action;
-        var team = Draft.findOne({'val': _myId});
-
-        if(!team) {
-            return;
-        }
-
-        Meteor.call('draft.setLike', h, a);
-         $('.likeSelector').addClass('hidden');
-
-        return false;
-    },
-
-    'touchend #heroesIcons .heroSelector, click #heroesIcons .heroSelector': function(e) { //NO ZOOM
-        e.preventDefault();
-
-        if(dblClickDetector) {
-            selectHeroes(e);
-            dblClickDetector = false;
-        } else {
-            dblClickDetector = true;
-
-            Meteor.setTimeout(function() {
-                if(dblClickDetector) {
-                    if(!Draft.findOne({'val': localStorage.getItem('myPersonalId')})) {
-                        return;
-                    } else {
-                        $('.likeSelector').addClass('hidden');
-                        $(e.currentTarget).find('.likeSelector').removeClass('hidden');
-                    }
-                }
-                dblClickDetector = false;
-            }, 555);
-        }
-        return false;
     }
 });
  

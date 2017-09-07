@@ -23,6 +23,10 @@ Meteor.publish('bet', function() {
     return Bet.find({});
 });
 
+Meteor.publish('djeycoin', function() {
+    return Djeycoin.find({});
+});
+
 Meteor.publish('draft', function (code) {
     return Draft.find({});
 });

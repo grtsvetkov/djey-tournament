@@ -1,0 +1,55 @@
+<template name="_draft">
+    <div id="dbd">
+        {{#if is_admin}}
+            <button id="closeDBD">Закрыть драфт</button>
+        {{/if}}
+        <div class="wrap">
+
+            <div class="block-action teamA">
+                {{#with teamList 'A'}}
+                    <div class="players">
+                        {{#each .}}
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
+                        {{/each}}
+                    </div>
+                {{/with}}
+                <div id="action-step0" class="ban" style="{{styleStep 0}}"></div>
+                <div id="action-step2" class="pick" style="{{styleStep 2}}"></div>
+                <div id="action-step5" class="ban" style="{{styleStep 5}}"></div>
+                <div id="action-step7" class="pick" style="{{styleStep 7}}"></div>
+                <div id="action-step8" class="pick" style="{{styleStep 8}}"></div>
+            </div>
+
+            <div id="heroesIcons">
+                {{#each heroes}}
+                    <div class="{{class}} heroSelector" data-name="{{name}}"
+                         style="background-image: url('/img/{{name}}.gif')">
+                        <div class="likeSelected">
+                            {{#each likes}}
+                                <span><img src="/css/images/{{action}}.png"> {{name}}</span>
+                            {{/each}}
+                        </div>
+                        <div class="likeSelector hidden">
+                            <img data-action="like" data-name="{{name}}" src="/css/images/like.png">
+                            <img data-action="dislike" data-name="{{name}}" src="/css/images/dislike.png">
+                        </div>
+                    </div>{{/each}}
+            </div>
+
+            <div class="block-action teamB">
+                {{#with teamList 'B'}}
+                    <div class="players">
+                        {{#each .}}
+                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
+                        {{/each}}
+                    </div>
+                {{/with}}
+                <div id="action-step1" class="ban" style="{{styleStep 1}}"></div>
+                <div id="action-step3" class="pick" style="{{styleStep 3}}"></div>
+                <div id="action-step4" class="ban" style="{{styleStep 4}}"></div>
+                <div id="action-step6" class="pick" style="{{styleStep 6}}"></div>
+                <div id="action-step9" class="pick" style="{{styleStep 9}}"></div>
+            </div>
+        </div>
+    </div>
+</template>
