@@ -36,6 +36,7 @@ li {
     line-height: 25px;
     cursor: pointer;
     border-bottom: 1px solid #d9daa8;
+    list-style: none;
 }
 
 li.isMe {
@@ -293,12 +294,12 @@ span.red {
 }
 
 .online {
-    width: 10px;
-    height: 10px;
+    width: 10px !important;
+    height: 10px !important;
     background-color: #00FF00;
     display: inline-block;
     margin-left: 1px;
-    margin-right: 3px;
+    margin-right: 3px !important;
     border-radius: 5px;
 }
 
@@ -536,16 +537,74 @@ fieldset legend{
 
 }
 
-.block-action.teamA div{
+.block-action.teamA .playerRole {
+    position: absolute;
+    width: 40px;
+    background-image: none;
+    height: 40px;
+    border: 1px solid #ffffff;
+    border-right: none;
+    border-top: none;
+    border-radius: 0px 0px 0px 7px;
+    margin: 0;
+    right: 0;
+    padding: 3px;
+}
+
+.block-action.teamB .playerRole {
+    position: absolute;
+    width: 40px;
+    background-image: none;
+    height: 40px;
+    border: 1px solid #ffffff;
+    border-left: none;
+    border-top: none;
+    border-radius: 0px 0px 7px 0px;
+    margin: 0;
+    left: 0;
+    padding: 3px;
+}
+
+.block-action .playerName {
+    position: relative;
+    top: 113px;
+    margin-top: 0;
+    margin: 0;
+    padding: 0;
+    padding-left: 4px;
+    overflow: hidden;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.block-action .playerName li{
+    font-size: 15px;
+    color: #ffffff;
+    border: none;
+}
+
+.block-action .playerName li div.online{
+    margin-top: 0;
+}
+
+.block-action.teamA div.ban, .block-action.teamA div.pick{
     border: 1px solid #63D1F4;
+}
+
+.block-action.teamA div.ban.current, .block-action.teamA div.pick.current {
+    box-shadow: 0 0 40px 10px rgba(99, 209, 244, 0.7);
 }
 
 .block-action.teamA div.active{
     background-color: rgba(99,209,244, 0.5);
 }
 
-.block-action.teamB div{
+.block-action.teamB div.ban, .block-action.teamB div.pick{
     border: 1px solid #FBA16C;
+}
+
+.block-action.teamB div.ban.current, .block-action.teamB div.pick.current {
+    box-shadow: 0 0 40px 10px rgba(251, 161, 108, 0.7);
 }
 
 .block-action.teamB div.active{
@@ -553,33 +612,17 @@ fieldset legend{
 }
 
 .block-action div{
+    position: relative;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
     background-image: url('images/glory.png');
-    background-size: 100%;
-}
+    background-size: cover;
 
-.block-action .players {
-    margin-top: 10px;
-    width: 140px;
-    color: #ffffff;
-    background-image: none;
-}
-
-.block-action .players p{
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.block-action .players p.current {
-    border: 2px solid green;
-    background-color: rgba(0,128,0, 0.5);
-}
-
-.block-action .players p div{
-    margin-top: 0px;
-    border: none;
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
 }
 
 .block-action .ban{
@@ -676,4 +719,102 @@ fieldset legend{
         opacity: 0.3;
         box-shadow: 0 0 20px 20px rgba(255,255,255,1);
     }
+}
+
+#roleSelect {
+    display: none;
+
+    width: 400px;
+    height: 350px;
+    background: #000000;
+    border: 1px solid #FFFFFF;
+    border-radius: 7px;
+
+    z-index: 3;
+
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin: -200px 0 0 -200px;
+    padding: 15px;
+
+    color: #ffffff;
+    font-size: 16px;
+    text-align: center;
+}
+
+#roleSelect .role p, #roleSelect .build p {
+    text-align: left;
+    font-size: 20px;
+}
+
+#roleSelect .role .roleItems, #roleSelect .build .buildItems {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
+}
+
+#roleSelect .role .roleItems .roleItem div{
+    margin-top: 4px;
+    padding: 4px;
+    border: 1px solid #ffffff;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+#roleSelect .build p {
+    margin-top: 40px;
+}
+
+#roleSelect .build .buildItems .buildItem {
+    padding: 5px;
+    border: 1px solid #ffffff;
+    border-radius: 7px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 50px;
+    width: 100px;
+}
+
+
+
+#dbd .weapons {
+    color: #FF0000;
+}
+
+#roleSelect .buildItems div.weapons.current {
+    box-shadow: 0 0 40px 10px rgba(255, 0, 0, 0.7);
+}
+
+#roleSelect .roleItems div.weapons.current, #dbd .block-action .playerRole.weapons {
+    background-color: #FF0000;
+}
+
+
+#dbd .crystal {
+    color: #30ccec;
+}
+
+#roleSelect .buildItems div.crystal.current {
+    box-shadow: 0 0 40px 10px rgba(48, 204, 246, 0.7);
+}
+
+#roleSelect .roleItems div.crystal.current, #dbd .block-action .playerRole.crystal {
+    background-color: #30ccec;
+}
+
+
+
+#dbd .support {
+    color: #FFFF00;
+}
+
+#roleSelect .buildItems div.support.current {
+    box-shadow: 0 0 40px 10px rgba(255, 255, 0, 0.7);
+}
+
+#roleSelect .roleItems div.support.current, #dbd .block-action .playerRole.support {
+    background-color: #FFFF00;
 }

@@ -1,23 +1,54 @@
 <template name="_draft">
     <div id="dbd">
+
+        <div id="roleSelect">
+            {{#with currentRole}}
+                <div class="role">
+                    <p>Роль</p>
+                    <div class="roleItems">
+                        <div class="roleItem">
+                            <span>Кэрри</span>
+                            <div data-role="carry" class="{{build}} {{#if eq role 'carry'}}current{{/if}}"><img src="/css/images/carry.png" width="70"></div>
+                        </div>
+                        <div class="roleItem">
+                            <span>Лесник</span>
+                            <div data-role="jungler" class="{{build}} {{#if eq role 'jungler'}}current{{/if}}"><img src="/css/images/jungler.png" width="70"></div>
+                        </div>
+                        <div class="roleItem">
+                            <span>Капитан</span>
+                            <div data-role="captain" class="{{build}} {{#if eq role 'captain'}}current{{/if}}"><img src="/css/images/captain.png" width="70"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="build">
+                    <p>Сборка</p>
+                    <div class="buildItems">
+                        <div class="buildItem weapons {{#if eq build 'weapons'}}current{{/if}}" data-build="weapons">Оружие</div>
+                        <div class="buildItem crystal {{#if eq build 'crystal'}}current{{/if}}" data-build="crystal">Кристалл</div>
+                        <div class="buildItem support {{#if eq build 'support'}}current{{/if}}" data-build="support">Поддержка</div>
+                    </div>
+                </div>
+            {{/with}}
+        </div>
+
+
         {{#if is_admin}}
             <button id="closeDBD">Закрыть драфт</button>
         {{/if}}
         <div class="wrap">
 
             <div class="block-action teamA">
-                {{#with teamList 'A'}}
-                    <div class="players">
-                        {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
-                        {{/each}}
-                    </div>
-                {{/with}}
-                <div id="action-step0" class="ban" style="{{styleStep 0}}"></div>
-                <div id="action-step2" class="pick" style="{{styleStep 2}}"></div>
-                <div id="action-step5" class="ban" style="{{styleStep 5}}"></div>
-                <div id="action-step7" class="pick" style="{{styleStep 7}}"></div>
-                <div id="action-step8" class="pick" style="{{styleStep 8}}"></div>
+                <div id="action-step0" class="ban {{#if isCurrent 0}}current{{/if}}" style="{{styleStep 0}}"></div>
+                <div id="action-step2" data-team="A" data-position="0" class="pick {{#if isCurrent 2}}current{{/if}}" style="{{styleStep 2}}">
+                    {{#with playerPlace 'A' 0}}{{>_draft_player}}{{/with}}
+                </div>
+                <div id="action-step5" class="ban {{#if isCurrent 5}}current{{/if}}" style="{{styleStep 5}}"></div>
+                <div id="action-step7" data-team="A" data-position="1" class="pick {{#if isCurrent 7}}current{{/if}}" style="{{styleStep 7}}">
+                    {{#with playerPlace 'A' 1}}{{>_draft_player}}{{/with}}
+                </div>
+                <div id="action-step8" data-team="A" data-position="2" class="pick {{#if isCurrent 8}}current{{/if}}" style="{{styleStep 8}}">
+                    {{#with playerPlace 'A' 2}}{{>_draft_player}}{{/with}}
+                </div>
             </div>
 
             <div id="heroesIcons">
@@ -37,19 +68,31 @@
             </div>
 
             <div class="block-action teamB">
-                {{#with teamList 'B'}}
-                    <div class="players">
-                        {{#each .}}
-                            <p class="{{#if isCurrent}}current{{/if}}" data-id="{{_id}}"><div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}</p>
-                        {{/each}}
-                    </div>
-                {{/with}}
-                <div id="action-step1" class="ban" style="{{styleStep 1}}"></div>
-                <div id="action-step3" class="pick" style="{{styleStep 3}}"></div>
-                <div id="action-step4" class="ban" style="{{styleStep 4}}"></div>
-                <div id="action-step6" class="pick" style="{{styleStep 6}}"></div>
-                <div id="action-step9" class="pick" style="{{styleStep 9}}"></div>
+                <div id="action-step1" class="ban {{#if isCurrent 1}}current{{/if}}" style="{{styleStep 1}}"></div>
+                <div id="action-step3" data-team="B" data-position="0" class="pick {{#if isCurrent 3}}current{{/if}}" style="{{styleStep 3}}">
+                    {{#with playerPlace 'B' 0}}{{>_draft_player}}{{/with}}
+                </div>
+                <div id="action-step4" class="ban {{#if isCurrent 4}}current{{/if}}" style="{{styleStep 4}}"></div>
+                <div id="action-step6" data-team="B" data-position="1" class="pick {{#if isCurrent 6}}current{{/if}}" style="{{styleStep 6}}">
+                    {{#with playerPlace 'B' 1}}{{>_draft_player}}{{/with}}
+                </div>
+                <div id="action-step9" data-team="B" data-position="2" class="pick {{#if isCurrent 9}}current{{/if}}" style="{{styleStep 9}}">
+                    {{#with playerPlace 'B' 2}}{{>_draft_player}}{{/with}}
+                </div>
             </div>
         </div>
+    </div>
+</template>
+
+<template name="_draft_player">
+    {{#with role}}
+        <div class="playerRole {{build}}">
+            <img src="/css/images/{{role}}.png" width="40">
+        </div>
+    {{/with}}
+    <div class="playerName">
+        <li data-id="{{_id}}" data-name="{{name}}">
+            <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}
+        </li>
     </div>
 </template>

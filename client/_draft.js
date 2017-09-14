@@ -1,3 +1,11 @@
+const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
+const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
+
+var heroes = ['reza', 'grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
+    'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
+    'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
+];
+
 Template._draft.helpers({
 
     'teamList': function(team) {
@@ -78,6 +86,56 @@ Template._draft.helpers({
                 }
             }
         }
+    },
+
+    'playerPlace': function(team, position) {
+        var teamIds = Draft.findOne({name: team});
+
+        if(!teamIds || !teamIds.val || !teamIds.val[position]) {
+            return;
+        }
+        
+        var player = Con.findOne({_id: teamIds.val[position]});
+        
+        if(!player) {
+            return;
+        }
+
+
+        var currentTeam = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+        
+        if(currentTeam && currentTeam.name == team) {
+            var data = Draft.findOne({name: 'data'});
+
+            if (!data || !data.val ) {
+                return;
+            }
+            
+            if(data.val.role[team][player._id]) {
+                player.role = data.val.role[team][player._id];
+            }
+        }
+        
+        return player;
+    },
+
+    'isCurrent': function(step) {
+        var data = Draft.findOne({name: 'data'});
+        return data && data.val && data.val.currentStep == step ? true : false;
+    },
+    
+    currentRole: function() {
+        var _id = localStorage.getItem('myPersonalId');
+        var data = Draft.findOne({name: 'data'});
+        var team = Draft.findOne({'val': _id});
+
+
+
+        if(!team || !team.name || !data || !data.val) {
+            return;
+        }
+        
+        return !data.val.role[team.name][_id] ? {role: '', build: ''} : data.val.role[team.name][_id]
     }
 });
 
@@ -138,6 +196,27 @@ var dblClickDetector = false;
 
 Template._draft.events({
 
+    'click .block-action .pick': function(e) {
+
+        e.preventDefault();
+
+        var team = e.currentTarget.dataset.team;
+        var position = parseInt(e.currentTarget.dataset.position);
+
+
+        var teamIds = Draft.findOne({name: team});
+
+        if(!team || !teamIds || !teamIds.val || !teamIds.val[position]) {
+            return;
+        }
+
+        if(localStorage.getItem('myPersonalId') == teamIds.val[position]) {
+            $( '#roleSelect' ).toggle();
+        }
+
+        return false;
+    },
+
     'click #closeDBD': function() {
         Meteor.call('draft.close');
     },
@@ -188,5 +267,13 @@ Template._draft.events({
             }, 555);
         }
         return false;
+    },
+    
+    'click #roleSelect .roleItem div': function(e) {
+        Meteor.call('draft.setRole', e.currentTarget.dataset.role);
+    },
+
+    'click #roleSelect .buildItem': function(e) {
+        Meteor.call('draft.setBuild', e.currentTarget.dataset.build);
     }
 });

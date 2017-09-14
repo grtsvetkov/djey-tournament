@@ -10,7 +10,8 @@ var defaultDraft = {
     steps: [],
     ban: [],
     pick: [],
-    like: {'A': {}, 'B': {}}
+    like: {'A': {}, 'B': {}},
+    role: {'A': {}, 'B': {}}
 };
 
 DraftModel = {
@@ -32,7 +33,7 @@ DraftModel = {
 
         var teamB = Com.findOne({num: parseInt(data.commands[1])}).list;
 
-        if(teamA.length == 3 && teamB.length == 3) {
+        if(teamA.length == 3 && teamB.length == 3 || true) {
             Draft.update({name: 'A'}, {$set: {val: teamA}});
             Draft.update({name: 'B'}, {$set: {val: teamB}});
             Draft.update({name: 'data'}, {$set: {val: defaultDraft}});
@@ -42,33 +43,63 @@ DraftModel = {
             return;
         }
     },
+
+    _getTeamByPlayerId: function(_id) {
+        var team = Draft.findOne({'val': _id});
+
+        if(!team || !team.name) {
+            throw new Meteor.Error(36, 'Ошибка авторизации');
+            return;
+        }
+        
+        return team;
+    },
     
-    step: function(h) {
-        var currentPlayer = Con.findOne({con_id: this.connection.id});
+    _getCurrentPlayerAndData: function(con_id) {
+
+        var currentPlayer = Con.findOne({con_id: con_id});
 
         if (!currentPlayer) {
             throw new Meteor.Error(31, 'Ошибка авторизации');
             return;
         }
-
+        
         var data = Draft.findOne({name: 'data'});
-        var data_id = 0;
 
-        if (data && data.val) {
-            data_id = data._id;
-            data = data.val;
-        } else {
+        if (!data || !data.val) {
             throw new Meteor.Error(32, 'Ошибка авторизации');
             return;
         }
 
+        return [currentPlayer, data.val];
+    },
+    
+    _updateData: function(data) {
+        Draft.update({name: 'data'}, {
+            $set: {
+                'val.currentStep': data.currentStep,
+                'val.currentPlayer': data.currentPlayer,
+                'val.currentTeam': data.currentTeam,
+                'val.steps': data.steps,
+                'val.ban': data.ban,
+                'val.pick': data.pick,
+                'val.like': data.like,
+                'val.role': data.role
+            }
+        });
+    },
+    
+    step: function(h) {
+        
+        var [currentPlayer, data] = DraftModel._getCurrentPlayerAndData(this.connection.id);
+         
         if (ConModel.isAdmin(this.connection.id)) { //ЭТО АДМИНИСТРАТОР
-            DraftModel._pick(data_id, data, h);
+            DraftModel._pick(data, h);
             return;
         }
 
-        var team = Draft.findOne({'val': currentPlayer._id});
-
+        var team = DraftModel._getTeamByPlayerId(currentPlayer._id);
+        
         if (data.currentTeam != team.name) { //Не подходит команда
             throw new Meteor.Error(33, 'Ошибка авторизации');
             return;
@@ -79,10 +110,10 @@ DraftModel = {
             return;
         }
 
-        DraftModel._pick(data_id, data, h);
+        DraftModel._pick(data, h);
     },
 
-    _pick: function(data_id, data, h) {
+    _pick: function(data, h) {
         if (data.pick.indexOf(h) <= -1 && data.ban.indexOf(h) <= -1) {
 
             var action = actionByStep[data.currentStep];
@@ -94,42 +125,17 @@ DraftModel = {
             data.currentTeam = teamByStep[data.currentStep];
             data.currentPlayer = playerByStep[data.currentStep];
 
-            Draft.update({_id: data_id}, {
-                $set: {
-                    'val.currentStep': data.currentStep,
-                    'val.currentPlayer': data.currentPlayer,
-                    'val.currentTeam': data.currentTeam,
-                    'val.steps': data.steps,
-                    'val.ban': data.ban,
-                    'val.pick': data.pick,
-                    'val.like': data.like
-                }
-            });
+            DraftModel._updateData(data);
         } else {
             throw new Meteor.Error('500', 'Герой уже был выбран ранее');
         }
     },
 
     setLike: function(h, a) {
-        var currentPlayer = Con.findOne({con_id: this.connection.id});
+        
+        var [currentPlayer, data] = DraftModel._getCurrentPlayerAndData(this.connection.id);
 
-        if (!currentPlayer) {
-            throw new Meteor.Error(31, 'Ошибка авторизации');
-            return;
-        }
-
-        var data = Draft.findOne({name: 'data'});
-        var data_id = 0;
-
-        if (data && data.val) {
-            data_id = data._id;
-            data = data.val;
-        } else {
-            throw new Meteor.Error(32, 'Ошибка авторизации');
-            return;
-        }
-
-        var team = Draft.findOne({'val': currentPlayer._id});
+        var team = DraftModel._getTeamByPlayerId(currentPlayer._id);
 
         if(!data.like[team.name][h]) {
             data.like[team.name][h] = {};
@@ -141,17 +147,45 @@ DraftModel = {
             data.like[team.name][h][currentPlayer.name] = a;
         }
 
-        Draft.update({_id: data_id}, {
-            $set: {
-                'val.currentStep': data.currentStep,
-                'val.currentPlayer': data.currentPlayer,
-                'val.currentTeam': data.currentTeam,
-                'val.steps': data.steps,
-                'val.ban': data.ban,
-                'val.pick': data.pick,
-                'val.like': data.like
-            }
-        });
+        DraftModel._updateData(data);
+    },
+
+    setRole: function(role) {
+
+        var [currentPlayer, data] = DraftModel._getCurrentPlayerAndData(this.connection.id);
+
+        var team = DraftModel._getTeamByPlayerId(currentPlayer._id);
+
+        if(!data.role[team.name][currentPlayer._id]) {
+            data.role[team.name][currentPlayer._id] = { role: '', build: '' };
+        }
+
+        if(data.role[team.name][currentPlayer._id].role == role) {
+            data.role[team.name][currentPlayer._id].role = '';
+        } else {
+            data.role[team.name][currentPlayer._id].role = role;
+        }
+
+        DraftModel._updateData(data);
+    },
+
+    setBuild: function(build) {
+
+        var [currentPlayer, data] = DraftModel._getCurrentPlayerAndData(this.connection.id);
+
+        var team = DraftModel._getTeamByPlayerId(currentPlayer._id);
+
+        if(!data.role[team.name][currentPlayer._id]) {
+            data.role[team.name][currentPlayer._id] = { role: '', build: '' };
+        }
+
+        if(data.role[team.name][currentPlayer._id].build == build) {
+            data.role[team.name][currentPlayer._id].build = '';
+        } else {
+            data.role[team.name][currentPlayer._id].build = build;
+        }
+
+        DraftModel._updateData(data);
     },
 
     close: function() {
@@ -168,6 +202,8 @@ Meteor.methods({
     'draft.create': DraftModel.create,
     'draft.step': DraftModel.step,
     'draft.setLike': DraftModel.setLike,
+    'draft.setRole': DraftModel.setRole,
+    'draft.setBuild': DraftModel.setBuild,
     'draft.close': DraftModel.close
 });
 
