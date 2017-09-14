@@ -135,6 +135,31 @@ Template.AppLayout.events({
         diag.dialog('open');
     },
 
+    'click #banList': function(){
+
+        var list = Ban.find({type: 'permanent'}).fetch();
+
+
+        var html = '';
+
+        _.each(list, function(i){
+            html += `<p>` + i.name + `<button onclick="Meteor.call('con.removeFromBan', '`+i.name+`'); $(this).parent().remove()">&#8635;</button></p>`;
+        });
+
+        var diag = $('<div id="myDialog" title="Черный список">'+html+'</div>');
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Закрыть': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+    },
+
     'click #showDjeycoin': function() {
 
         var player = Con.findOne({_id: localStorage.getItem('myPersonalId'), name: {$exists: true}});
@@ -254,6 +279,17 @@ Template.liPlayer.events({
                 buttons: {
                     'Да, выкинуть его': function () {
                         Meteor.call('con.deleteName', name, function (err) {
+                            if (err) {
+                                console.log(err);
+                                sAlert.error(err.reason);
+                            }
+                        });
+
+                        diag.dialog('close');
+                        diag.remove();
+                    },
+                    'Не учавствует в турнирах': function () {
+                        Meteor.call('con.banByName', name, function (err) {
                             if (err) {
                                 console.log(err);
                                 sAlert.error(err.reason);

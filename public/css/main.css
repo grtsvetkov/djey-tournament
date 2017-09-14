@@ -633,6 +633,7 @@ fieldset legend{
 .block-action .pick{
     width: 140px;
     height: 140px;
+    cursor: pointer;
 }
 
 #heroesIcons {
@@ -808,13 +809,13 @@ fieldset legend{
 
 
 #dbd .support {
-    color: #FFFF00;
+    color: #dfb442;
 }
 
 #roleSelect .buildItems div.support.current {
-    box-shadow: 0 0 40px 10px rgba(255, 255, 0, 0.7);
+    box-shadow: 0 0 40px 10px rgba(223, 180, 66, 0.7);
 }
 
 #roleSelect .roleItems div.support.current, #dbd .block-action .playerRole.support {
-    background-color: #FFFF00;
+    background-color: #dfb442;
 }

@@ -203,7 +203,6 @@ Template._draft.events({
         var team = e.currentTarget.dataset.team;
         var position = parseInt(e.currentTarget.dataset.position);
 
-
         var teamIds = Draft.findOne({name: team});
 
         if(!team || !teamIds || !teamIds.val || !teamIds.val[position]) {

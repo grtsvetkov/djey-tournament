@@ -87,7 +87,9 @@
 <template name="_draft_player">
     {{#with role}}
         <div class="playerRole {{build}}">
-            <img src="/css/images/{{role}}.png" width="40">
+            {{#if role}}
+                <img src="/css/images/{{role}}.png" width="40">
+            {{/if}}
         </div>
     {{/with}}
     <div class="playerName">

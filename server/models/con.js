@@ -37,6 +37,7 @@ ConModel = {
 
             var lvl = String(Math.ceil((player.data[0].attributes.stats.skillTier + 1) / 3));
             var lvlM = String((player.data[0].attributes.stats.skillTier + 1) % 3); //0 - золото, 1 - бронза, 2 - серебро
+
             ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, lvl+'-'+lvlM);
         })).catch(function (errors) {
             Con.update({_id: _id}, {$set: {error: 'Игрок не найден в игре (EU регион)'}});
@@ -127,6 +128,10 @@ ConModel = {
                 Con.remove({_id: con._id});
             })
         }
+    },
+
+    banByName: function(name) {
+        Ban.insert({name: name, type: 'permanent'});
     },
 
     setCommand: function (_id, command) {
@@ -220,11 +225,14 @@ ConModel = {
     },
 
     removeFromBan: function (name) {
+        
+        
+        
         if (!ConModel.isAdmin(this.connection.id)) {
             throw new Meteor.Error(9, 'Ошибка авторизации');
             return;
         }
-
+        
         Ban.remove({name: name});
     },
 
@@ -252,6 +260,7 @@ Meteor.methods({
     'con.setAdmin': ConModel.setAdmin,
     'con.readError': ConModel.readError,
     'con.removeFromBan': ConModel.removeFromBan,
+    'con.banByName': ConModel.banByName,
     'con.setCommandListSort': ConModel.setCommandListSort
 });
 
