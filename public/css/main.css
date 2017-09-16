@@ -978,6 +978,10 @@ fieldset legend{
     display: flex;
 }
 
+#guideItemInfo .abilities-wrapper .video-container {
+    display: none;
+}
+
 #guideItemInfo .abilities-wrapper .ability .text {
     padding: 5px;
     margin: 5px;
