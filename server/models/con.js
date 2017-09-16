@@ -29,7 +29,7 @@ ConModel = {
         vainglory.players.getByName([name]).then(Meteor.bindEnvironment(function (player) {
 
             if (!player || !player.player || !player.player[0].data || !player.data[0].id) {
-                //console.log(player);
+                //console.log('player not found', player);
                 Con.update({_id: _id}, {$set: {error: 'Игрок не найден в игре (EU регион)'}});
                 //throw new Meteor.Error(1, 'Игрок не найден в игре (EU регион)');
                 return;

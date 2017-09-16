@@ -1,0 +1,36 @@
+<template name="guide">
+    <div id="wrap">
+        <div id="mainBlock" class="row">
+            <div id="guide">
+                {{#each heroes}}
+                    <p class="hero" data-h="{{name}}">
+                        <img class="avatar" src="/img/{{name}}.gif" />
+                        <span>{{name}}</span>
+                        {{#if is_admin}}
+                            <br/><button class="edit" data-h="{{name}}">Редактировать</button>
+                        {{/if}}
+                    </p>
+                {{/each}}
+            </div>
+            <div id="guideItemWrap">
+                <div id="guideItem">
+                    <p id="closeItem">Закрыть</p>
+                    {{#with selectedHero}}
+                        <div id="guideItemName">
+                            <span>{{name}}</span>
+                            <img src="/img/big/{{_id}}.png">
+                        </div>
+                        <div id="guideItemInfo">
+                            <div class="stats">
+                                {{{stats}}}
+                            </div>
+                            <div class="abilities">
+                               {{{abilities}}}
+                            </div>
+                        </div>
+                    {{/with}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

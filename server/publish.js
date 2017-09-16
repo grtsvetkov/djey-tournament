@@ -30,3 +30,7 @@ Meteor.publish('djeycoin', function() {
 Meteor.publish('draft', function (code) {
     return Draft.find({});
 });
+
+Meteor.publish('wiki', function() {
+    return Wiki.find({});
+});
