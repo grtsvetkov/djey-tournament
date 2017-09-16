@@ -3,11 +3,11 @@
         <div id="mainBlock" class="row">
             <div id="guide">
                 {{#each heroes}}
-                    <p class="hero" data-h="{{name}}">
-                        <img class="avatar" src="/img/{{name}}.gif" />
+                    <p class="hero" data-h="{{_id}}">
+                        <img class="avatar" src="/img/{{_id}}.gif" />
                         <span>{{name}}</span>
                         {{#if is_admin}}
-                            <br/><button class="edit" data-h="{{name}}">Редактировать</button>
+                            <br/><button class="edit" data-h="{{_id}}">Редактировать</button>
                         {{/if}}
                     </p>
                 {{/each}}

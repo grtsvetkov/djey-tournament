@@ -846,6 +846,7 @@ fieldset legend{
     text-align: center;
     font-size: 18px;
     cursor: pointer;
+    color: #ffffff;
 }
 
 #guide .hero img.avatar{

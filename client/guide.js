@@ -1,14 +1,14 @@
-var heroes = ['reza', 'grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
-    'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
-    'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
-];
+var heroes = {'reza': 'Риза', 'grace':'Грэйс', 'adagio': 'Адфжио', 'alpha': 'Альфа', 'ardan': 'Ардан', 'baptiste': 'Батист', 'baron': 'Барон', 'blackfeather': 'Ворон', 'catherine': 'Катрин', 'celeste': 'Селеста', 'flicker': 'Фликер',
+    'fortress': 'Фортресс', 'glaive': 'Глейв', 'grumpjaw': 'Грамп', 'gwen': 'Гвен', 'idris': 'Идрис', 'joule': 'Джоуль', 'kestrel': 'Кэстрел', 'koshka': 'Кошка', 'krul': 'Крул', 'lance': 'Ланс', 'lyra': 'Лира',
+    'ozo': 'Озо', 'petal': 'Петаль', 'phinn': 'Финн', 'ringo': 'Ринго', 'reim': 'Райм', 'rona': 'Рона', 'samuel': 'Сэмюэль', 'saw': 'П.И.Л.А.', 'skaarf': 'Скаарф', 'skye': 'Скай', 'taka': 'Така', 'vox': 'Вокс'
+};
 
 var selectedHero = new ReactiveVar('');
 
 Template.guide.helpers({
     'heroes': function() {
         return _.map(heroes, function(i, key){
-            return {name: i};
+            return {_id: key, name: i};
         })
     },
     
