@@ -50,13 +50,19 @@ Template._bet.helpers({
         var prc0 = (count0 * 100) / (count0 + count1);
         prc0 = prc0.toFixed(1);
 
-        return betAction == 0 ? prc0 + '%<span>'+count0+'</span>' : (100 - prc0) + '%<span>'+count1+'</span>';
+        return betAction == 0 ? prc0 + '%<span>'+count0+'</span>' : (100 - prc0).toFixed(1) + '%<span>'+count1+'</span>';
 
     }
 });
 
 
 Template._bet.events({
+
+    'click .close': function(){
+        $('#envBet').remove();
+    },
+
+
     'click #startBet': function(e) {
 
         betTime = 300;
