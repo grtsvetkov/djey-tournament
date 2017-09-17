@@ -1008,7 +1008,7 @@ fieldset legend{
     font-size: 10px;
     margin-bottom: 1px;
     position: absolute;
-    margin-top: 50px;
+    margin-top: 70px;
     margin-left: 5px;
     padding: 0;
 }
@@ -1016,8 +1016,10 @@ fieldset legend{
 #guideItemInfo .abilities-wrapper .ability .header h5 {
     display: inline-block;
     vertical-align: top;
-    margin-top: 30px;
+    margin-top: 15px;
+    font-size: 16px;
     margin-left: 5px;
+    width: 130px;
 }
 
 
