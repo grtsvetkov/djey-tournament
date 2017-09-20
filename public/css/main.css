@@ -440,7 +440,7 @@ span.red {
     border-radius: 0 7px 7px 0;
     position:relative;
     display: inline-block;
-    width: 250px;
+    width: 300px;
     margin: 0;
     background-color: rgba(255, 255, 255, 0.7);
 }
@@ -453,6 +453,7 @@ span.red {
 }
 
 #setPlayer, #unsetPlayer {
+    font-size: 15px;
     display: block;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -690,7 +691,7 @@ fieldset legend{
 
 #heroesIcons div .likeSelected {
     margin-top: 5px;
-    height: 95px;
+    height: 90px;
     white-space: nowrap;
 }
 
@@ -709,7 +710,7 @@ fieldset legend{
 
 #heroesIcons div .likeSelector {
 
-    height: 30px;
+    height: 35px;
     display: flex;
     justify-content: space-around;
     -webkit-justify-content: space-around; /* Safari */
@@ -717,6 +718,7 @@ fieldset legend{
 }
 #heroesIcons div .likeSelector img{
     border-radius: 6px;
+    height: 35px;
 }
 
 
@@ -970,6 +972,24 @@ fieldset legend{
     color: #e19efb;
 }
 
+#guideItemInfo ul {
+    list-style: inside;
+}
+
+#guideItemInfo li{
+    overflow: hidden;
+    white-space: normal;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 13px;
+    line-height: normal;
+    cursor: default;
+    border-bottom: none;
+    list-style: inside;
+}
 
 #guideItemInfo .abilities-wrapper {
     margin: 10px;
@@ -995,6 +1015,7 @@ fieldset legend{
     b1ackground-color: rgba(0,0,0, 0.9);
     background-color: rgba(206, 205, 211, 0.1);
     border-radius: 7px;
+    font-size: 13px;
 }
 
 #guideItemInfo .abilities-wrapper .ability .header img {

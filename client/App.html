@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/jquery-ui-1.9.2.custom.min.css">
     <link rel="icon" sizes="64x64" href="/favico.ico?v=3">
+    <meta name="viewport" content="width=1000, initial-scale=0.25">
 </head>
 
 <body>
@@ -50,6 +51,7 @@
     {{#with status}}
         {{#if eq . '-1'}} {{! #Драфт}}
             {{>_draft}}
+            {{resetZoom}}
         {{else}}
             {{#if eq . '-2'}} {{! #ПобедаИлиПоражение}}
                 {{>_bet envStatus=.}}

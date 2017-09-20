@@ -139,8 +139,7 @@ Template._draft.helpers({
     }
 });
 
-var selectHeroes = function(e) {
-    var h = e.currentTarget.dataset.name;
+var selectHeroes = function(h) {
     var data = Draft.findOne({name: 'data'});
     var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
 
@@ -192,6 +191,7 @@ var selectHeroes = function(e) {
     }
 };
 
+var preSelectHero = false;
 var dblClickDetector = false;
 
 Template._draft.events({
@@ -222,6 +222,7 @@ Template._draft.events({
 
     'click .likeSelector img, touchend .likeSelector img': function(e) {
 
+        preSelectHero = false;
         e.preventDefault();
 
         var _myId = localStorage.getItem('myPersonalId');
@@ -247,23 +248,28 @@ Template._draft.events({
     'touchend #heroesIcons .heroSelector, click #heroesIcons .heroSelector': function(e) { //NO ZOOM
         e.preventDefault();
 
-        if(dblClickDetector) {
-            selectHeroes(e);
+        var hero = e.currentTarget.dataset.name;
+
+        if(dblClickDetector && hero == preSelectHero) {
+            $('.likeSelector').addClass('hidden');
+            selectHeroes(hero);
             dblClickDetector = false;
         } else {
+
+            preSelectHero = hero;
+
             dblClickDetector = true;
 
+            if(!Draft.findOne({'val': localStorage.getItem('myPersonalId')})) {
+                return;
+            } else {
+                $('.likeSelector').addClass('hidden');
+                $(e.currentTarget).find('.likeSelector').removeClass('hidden');
+            }
+
             Meteor.setTimeout(function() {
-                if(dblClickDetector) {
-                    if(!Draft.findOne({'val': localStorage.getItem('myPersonalId')})) {
-                        return;
-                    } else {
-                        $('.likeSelector').addClass('hidden');
-                        $(e.currentTarget).find('.likeSelector').removeClass('hidden');
-                    }
-                }
                 dblClickDetector = false;
-            }, 555);
+            }, 666);
         }
         return false;
     },
