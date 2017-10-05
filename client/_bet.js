@@ -58,8 +58,20 @@ Template._bet.helpers({
 
 Template._bet.events({
 
-    'click .close': function(){
-        $('#envBet').remove();
+    'click .close': function(e){
+
+        if(isAdmin()) {
+            if(e.currentTarget.dataset.mode == 'open') {
+                $('#envBetWrap').attr('style', 'height: 30px;');
+                e.currentTarget.dataset.mode = 'close';
+            } else {
+                $('#envBetWrap').attr('style','');
+                e.currentTarget.dataset.mode = 'open'
+            }
+
+        } else {
+            $('#envBet').remove();
+        }
     },
 
 

@@ -164,6 +164,7 @@ span.red {
 }
 
 #envBetWrap {
+    overflow: hidden;
     position: relative;
     z-index: 1;
     width: 100%;

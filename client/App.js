@@ -167,6 +167,37 @@ Template.AppLayout.events({
         diag.dialog('open');
     },
 
+    'click #randomLucky': function () {
+
+        var list = Con.find({name: {$exists: true}}).fetch();
+
+        if (!list || list.length == 0) {
+            throw new Meteor.Error(3, 'В пуле нет участников онлайн');
+            return;
+        }
+
+        list = _.shuffle(list);
+
+        var item = list[_.random(0, list.length - 1)];
+
+        var diag = $(`
+            <div id="myDialog" title="Поздравляем победителя!">
+                <p>Поздравляем победителея!</p>
+                <p><b>` + item.name + `</b></p>
+            </div>`);
+        diag.dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                'Закрыть': function () {
+                    diag.dialog('close');
+                    diag.remove();
+                }
+            }
+        });
+        diag.dialog('open');
+    },
+
     'click #showDjeycoin': function () {
 
         var player = Con.findOne({_id: localStorage.getItem('myPersonalId'), name: {$exists: true}});

@@ -177,6 +177,8 @@ ConModel = {
             return;
         }
 
+        list = _.shuffle(list);
+        
         var item = list[_.random(0, list.length - 1)];
 
         var test = Ban.findOne({name: item.name});
