@@ -10,6 +10,7 @@ Meteor.startup(function(){
     -1 = Драфт
     -2 = Ставки #ПобедаИлиПоражение
     -3 = Стаки #КраснаяИлиСиняя
+    -4 = #ВызовПринят
     Что-то другое = Победа какой-то комманды в турнире
      */
     var flag = Env.findOne({name: 'status'});
@@ -24,6 +25,7 @@ Meteor.startup(function(){
         Env.insert({name: 'name', val: 'VainGlory турнир от Djey'});
     }
 
+    //BET
     var flag = Env.findOne({name: 'bet'});
 
     if(!flag) {
@@ -36,6 +38,15 @@ Meteor.startup(function(){
         Env.insert({name: 'betTime', val: '0'});
     }
 
+    
+    //CHALLENGE
+    var flag = Env.findOne({name: 'challenge'});
+
+    if(!flag) {
+        Env.insert({name: 'challenge', val: '0'});
+    }
+    
+    //DRAFT
     if(Draft.find({}).count() == 0) {
         Draft.insert({name: 'A', val: 0});
         Draft.insert({name: 'B', val: 0});

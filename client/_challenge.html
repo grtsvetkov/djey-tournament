@@ -1,0 +1,28 @@
+<template name="_challenge">
+    <div id="envChallenge">
+        <div id="envChallengeWrap">
+            <div class="close" data-mode="open">Закрыть</div>
+            <div id="challengeTitle">#ВызовПринят</div>
+            <div id="envChallengeContent">
+                <div class="buttons">
+                    {{#if is_admin}}
+                        <button id="setWinner">Выбрать победителя</button>
+                        <button id="stop">Закрыть и отчистить</button>
+                    {{else}}
+                        <button id="takePart">Принять участие</button>
+                    {{/if}}
+                </div>
+                <div class="challengeList">
+                    {{#each list}}
+                        <span>{{name}}</span>
+                    {{/each}}
+                </div>
+                {{#with winner}}
+                <div id="challengeWinner">
+                    Победитель <strong>{{.}}</strong> !
+                </div>
+                {{/with}}
+            </div>
+        </div>
+    </div>
+</template>

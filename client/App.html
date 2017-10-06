@@ -58,10 +58,14 @@
                 {{#if eq . '-3'}} {{! #КраснаяИлиСиняя}}
                     {{>_bet envStatus=.}}
                 {{else}} {{! Кто-то победил в турнире}}
-                    <div id="envStatus">
-                        {{{.}}}
-                        <p class="close">Закрыть</p>
-                    </div>
+                    {{#if eq . '-4'}} {{! #ВызовПринят}}
+                        {{>_challenge}}
+                    {{else}} {{! Кто-то победил в турнире}}
+                        <div id="envStatus">
+                            {{{.}}}
+                            <p class="close">Закрыть</p>
+                        </div>
+                    {{/if}}
                 {{/if}}
             {{/if}}
         {{/if}}
@@ -87,7 +91,7 @@
             <button id="newBetRedBlue">#КрасныеИлиСиние</button>
             <button id="randomDjeycoin">Чемпион по DjeyCoin</button>
             <button id="banList">Черный список</button>
-            <button id="randomLucky">Случайный счастливчик!</button>
+            <button id="newChallenge">#ВызовПринят</button>
         {{/if}}
     </div>
     <div id="wrap">

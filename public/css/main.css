@@ -837,6 +837,99 @@ fieldset legend{
     background-color: #dfb442;
 }
 
+
+
+
+
+
+
+#envChallenge {
+    top: 150px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    width: 90%;
+    min-width: 650px;
+    height: 500px;
+    padding-right: 250px;
+    box-sizing: border-box;
+    margin-left: auto;
+    min-width: 650px;
+    margin-right: auto;
+}
+
+#envChallengeWrap {
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 650px;
+    height: 500px;
+    margin: auto;
+    background: #000000;
+    color: #ffffff;
+    font-size: 25px;
+    text-align: center;
+    padding-top: 15px;
+    box-shadow: 0 0 50px 40px rgba(0,0,0,1);
+}
+
+#envChallengeWrap .close {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#envChallenge #challengeTitle {
+    display: block;
+    height: auto;
+    width: 100%;
+    padding-bottom: 15px;
+}
+
+#envChallenge #envChallengeContent {
+    height: 500px;
+}
+
+#envChallengeContent .challengeList {
+    margin: 15px;
+    text-align: left;
+}
+
+#envChallengeContent .challengeList span{
+    padding: 4px;
+}
+
+#envChallengeContent #challengeWinner{
+    display: block;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    margin-left: 30%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #guide {
     display: -webkit-flex; /* Safari */
     display: flex;
@@ -1055,3 +1148,11 @@ fieldset legend{
 #guideItemInfo .abilities-wrapper .popup {
     display: none;
 }
+
+
+
+
+
+
+
+

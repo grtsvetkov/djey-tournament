@@ -24,7 +24,9 @@ ConModel = {
         Con.upsert({_id: _id}, {$set: {con_id: this.connection.id, online: true}});
     },
 
-    setName: function (_id, name) {
+    setName: function (_id, name, callbackType) {
+        
+        var connection_id = this.connection.id;
 
         vainglory.players.getByName([name]).then(Meteor.bindEnvironment(function (player) {
 
@@ -38,7 +40,16 @@ ConModel = {
             var lvl = String(Math.ceil((player.data[0].attributes.stats.skillTier + 1) / 3));
             var lvlM = String((player.data[0].attributes.stats.skillTier + 1) % 3); //0 - золото, 1 - бронза, 2 - серебро
 
-            ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, lvl+'-'+lvlM);
+            ConModel._setName(_id, player.data[0].attributes.name, player.data[0].id, lvl+'-'+lvlM, connection_id);
+            
+            if(callbackType) {
+                switch (callbackType) {
+                    case 'challengeTakePart':
+                        ChallengeModel.takePart(connection_id);
+                        break;
+                }
+            }
+            
         })).catch(function (errors) {
             Con.update({_id: _id}, {$set: {error: 'Игрок не найден в игре (EU регион)'}});
             //console.log('errors', errors);
@@ -48,7 +59,7 @@ ConModel = {
         });
     },
 
-    _setName: function (_id, name, vg_id, level) {
+    _setName: function (_id, name, vg_id, level, connection_id) {
         var flag = Con.findOne({name: name});
 
         if (flag) {
@@ -72,7 +83,8 @@ ConModel = {
                 name: name,
                 command: 0,
                 vg_id: vg_id,
-                vg_level: String(level)
+                vg_level: String(level),
+                con_id: connection_id
             }
         });
     },
