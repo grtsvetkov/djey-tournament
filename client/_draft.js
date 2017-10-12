@@ -1,9 +1,10 @@
 const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
 const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
 
-var heroes = ['reza', 'grace', 'adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste', 'flicker',
-    'fortress', 'glaive', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 'koshka', 'krul', 'lance', 'lyra',
-    'ozo', 'petal', 'phinn', 'ringo', 'reim', 'rona', 'samuel', 'saw', 'skaarf', 'skye', 'taka', 'vox'
+var heroes = ['adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste',
+    'churnwalker', 'flicker', 'fortress', 'glaive', 'grace', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 
+    'koshka', 'krul', 'lance', 'lyra', 'ozo', 'petal', 'phinn', 'reim', 'reza', 'ringo', 'rona', 'samuel', 
+    'saw', 'skaarf', 'skye', 'taka', 'vox'
 ];
 
 Template._draft.helpers({
