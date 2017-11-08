@@ -507,6 +507,22 @@ fieldset legend{
     margin: 20px auto;
 }
 
+.footerBlock {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
+}
+
+#twitchPlayer {
+    margin-right: 40px;
+}
+
+.footerBlock fieldset{
+    width: 100%;
+}
 
 
 

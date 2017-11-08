@@ -37,7 +37,7 @@
         <div id="footer">
             <div><a href="https://vk.com/djeyclub" target="_blank">VK Vainglory с Djey</a></div>
             <div><a href="http://www.youtube.com/c/djeyTV" target="_blank">Youtube DjeyTV</a></div>
-            <div><a href="https://www.twitch.tv/djey2828" target="_blank">Twitch Djey2828</a></div>
+            <div><a href="https://www.twitch.tv/djeytv" target="_blank">Twitch Djey2828</a></div>
             <div><a href="https://goodgame.ru/channel/djey2828" target="_blank">GoodGame Djey2828</a></div>
             <div><a href="https://discord.gg/h7DNGhV" target="_blank">Discord Djey</a></div>
             <div><a href="http://www.donationalerts.ru/r/djey2828" target="_blank">Поддержать стримера</a></div>
@@ -186,19 +186,26 @@
                 {{/with}}
             </div>
         </div>
-        <fieldset>
-            <legend>Участники прошлого турнира</legend>
-            <ul id="lastList" class="row">
-                {{#each last_list}}
-                    <li>
-                        {{#if is_admin}}
-                        <div data-name="{{name}}" class="remove">&#8635;</div>
-                        {{/if}}
-                        {{name}} {{{levelM vg_level}}}
-                    </li>
-                {{/each}}
-            </ul>
-        </fieldset>
+        <div class="footerBlock" >
+            <div id="twitchPlayer">
+                <button onclick="$('#twitchPlayer').remove()">Удалить видео</button>
+                <iframe src="https://player.twitch.tv/?channel=djeytv&autoplay=false" frameborder="0" autoplay="false" allowfullscreen="true" scrolling="no" height="480" width="640"></iframe>
+            </div>
+
+            <fieldset>
+                <legend>Участники прошлого турнира</legend>
+                <ul id="lastList" class="row">
+                    {{#each last_list}}
+                        <li>
+                            {{#if is_admin}}
+                            <div data-name="{{name}}" class="remove">&#8635;</div>
+                            {{/if}}
+                            {{name}} {{{levelM vg_level}}}
+                        </li>
+                    {{/each}}
+                </ul>
+            </fieldset>
+        </div>
     </div>
 </template>
 
