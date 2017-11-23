@@ -45,13 +45,14 @@ Template.AppLayout.events({
             <div id="myDialog" title="Внимание!">
                 <span id="dialogMsg">Уверены, что хотите создать новый турнир?</span>
                 <p><input id="newTourName" style="width: 100%" type="text" value="VainGlory турнир от Djey"></p>
+                <p>Минимальный ранг: <input id="newTourMinrang" style="width: 100px" type="text" value="4"></p>
             </div>`);
         diag.dialog({
             autoOpen: false,
             modal: true,
             buttons: {
                 'Да, создать новый турнир': function () {
-                    Meteor.call('tour.newTour', $('#newTourName').val(), function (err) {
+                    Meteor.call('tour.newTour', $('#newTourName').val(), $('#newTourMinrang').val(), function (err) {
                         if (err) {
                             console.log(err);
                             sAlert.error(err.reason);

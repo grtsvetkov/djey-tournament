@@ -3,6 +3,10 @@ Template._challenge.helpers({
 
         return Challenge.find({}).fetch();
     },
+    
+    'cnt': function() {
+        return Challenge.find({}).count();
+    },
 
     'winner': function () {
 

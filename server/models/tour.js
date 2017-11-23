@@ -1,7 +1,7 @@
 const tourCountFromCommandCount = { 2: 1, 4: 3, 8: 4, 16: 5};
 
 TourModel = {
-    newTour: function(name, commandCount) {
+    newTour: function(name, minrang, commandCount) {
 
         if(!ConModel.isAdmin(this.connection.id)) {
             throw new Meteor.Error(9, 'Ошибка авторизации');
@@ -27,6 +27,10 @@ TourModel = {
             Env.update({name: 'name'}, {$set: {val: name}});
         }
 
+        if(minrang) {
+            Env.update({name: 'minrang'}, {$set: {val: minrang}});
+        }
+        
         commandCount = 8; //Колличестко комманд участников
 
         var tourCount = tourCountFromCommandCount[commandCount]; //Колличество туров в зависимости от участников

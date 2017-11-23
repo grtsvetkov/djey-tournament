@@ -167,7 +167,6 @@ ConModel = {
         Con.update({con_id: con_id}, {$set: {online: false}});
     },
 
-
     getRandomTo: function (command) {
 
         if (!ConModel.isAdmin(this.connection.id)) {
@@ -182,7 +181,21 @@ ConModel = {
             return;
         }
 
-        var list = Con.find({name: {$exists: true}, command: {$eq: 0}, online: true}).fetch();
+        var minrang = Env.findOne({name: 'minrang'});
+
+        minrang = minrang.val ? parseInt(minrang.val) : 4;
+
+        var minrang_array = ['10-0', '10-1', '10-2'];
+
+        for(var i = minrang; i <= 9; i++) {
+            minrang_array.push(i+'-0');
+            minrang_array.push(i+'-1');
+            minrang_array.push(i+'-2');
+        }
+        
+        console.log(minrang_array);
+        
+        var list = Con.find({name: {$exists: true}, command: {$eq: 0}, vg_level: { $in: minrang_array}, online: true}).fetch();
 
         if (!list || list.length == 0) {
             throw new Meteor.Error(3, 'В пуле нет участников онлайн');
@@ -239,8 +252,6 @@ ConModel = {
     },
 
     removeFromBan: function (name) {
-        
-        
         
         if (!ConModel.isAdmin(this.connection.id)) {
             throw new Meteor.Error(9, 'Ошибка авторизации');

@@ -25,6 +25,12 @@ Meteor.startup(function(){
         Env.insert({name: 'name', val: 'VainGlory турнир от Djey'});
     }
 
+    var flag = Env.findOne({name: 'minrang'});
+
+    if(!flag) {
+        Env.insert({name: 'minrang', val: '4'});
+    }
+
     //BET
     var flag = Env.findOne({name: 'bet'});
 
