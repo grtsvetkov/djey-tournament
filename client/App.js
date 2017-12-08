@@ -23,7 +23,8 @@ var commandSort = function () {
 };
 
 Template.AppLayout.rendered = function () {
-}
+    $('#globalWrap').snowfall();
+};
 
 Template.AppLayout.helpers({
     'name': function () {
