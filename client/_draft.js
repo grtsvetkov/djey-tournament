@@ -4,8 +4,7 @@ const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick'
 var heroes = ['adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste',
     'churnwalker', 'flicker', 'fortress', 'glaive', 'grace', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 
     'koshka', 'krul', 'lance', 'lorelai', 'lyra', 'ozo', 'petal', 'phinn', 'reim', 'reza', 'ringo', 'rona', 'samuel', 
-    'saw', 'skaarf', 'skye', 'taka', 'vox'
-];
+    'saw', 'skaarf', 'skye', 'taka', 'varya', 'vox'];
 
 Template._draft.helpers({
 
