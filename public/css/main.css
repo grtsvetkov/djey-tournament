@@ -3,7 +3,7 @@ body, html, ul, div {
     padding: 0;
 }
 
-body, html {
+body{
     width: 100%;
     height: 100%;
     opacity: 1;
@@ -14,7 +14,13 @@ body, html {
     -o-background-size: cover;
     background-size: cover;
     min-width: 1000px;
-    font-family: SANS-SERIF;
+    font-family: sans-serif;
+}
+
+body.bg_ros {
+    background: url('images/background_ros.jpg') no-repeat center center fixed;
+    background-repeat: no-repeat;
+    background-size: auto 115%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -95,6 +101,10 @@ a {
 button:hover {
     border: 2px solid #dd7d70;
     color: #dd7d70;
+}
+
+.block {
+    display: block;
 }
 
 .inline {
@@ -257,13 +267,15 @@ span.red {
 }
 
 #logo {
-    display: block;
     top: 40px;
     left: 0;
     width: 150px;
     height: 150px;
     background-image: url('images/logo.png');
     background-size: 100%;
+    margin-right: 400px;
+    display: inline-block;
+    cursor: pointer;
 }
 
 #logo span {
@@ -275,6 +287,32 @@ span.red {
     padding-left: 150px;
     font-size: 23px;
     font-weight: 600;
+}
+
+#ros_logo {
+    width: 106px;
+    height: 61px;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    background: url('images/logo_ros.png');
+    background-size: contain;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#vg_logo {
+    width: 106px;
+    height: 61px;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    background: url('images/logo_vg.png') no-repeat center center;
+    background-size: contain;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 #banner {
@@ -517,7 +555,14 @@ fieldset legend{
 }
 
 #twitchPlayer {
-    margin-right: 40px;
+    width: 90%;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    -webkit-justify-content: center; /* Safari */
+    margin-left: auto;
+    text-align: center;
+    margin-right: auto;
 }
 
 .footerBlock fieldset{
@@ -528,9 +573,41 @@ fieldset legend{
 
 
 
+#ros-table{
+    display: block;
+    width: 90%;
+    margin: 5px;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
+    background-color: rgba(240, 240, 240, 0.6);
+    padding: 5px;
+    border-radius: 6px;
+    color: #000000;
+}
 
+#ros-table h2{
+    cursor: pointer;
+    color: #7f4346;
+    margin-bottom: 6px;
+}
 
+#ros-table .scrollBox {
+    height: 120px;
+    overflow-y: scroll;
+}
 
+#ros-table p{
+    padding: 10px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    display: inline-block;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 3px;
+}
 
 
 

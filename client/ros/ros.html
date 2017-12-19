@@ -1,0 +1,53 @@
+<template name="ros">
+    <div id="wrap">
+        <div id="mainBlock" class="row">
+            <div class="block">
+                <button id="register">Хочу играть с Djey!</button>
+
+                {{#if is_admin}}
+                    <br/><br/>
+                    <button id="reset">Очистить списки</button>
+                {{/if}}
+            </div>
+
+            <div id="ros-table">
+                {{#with list}}
+                    <div id="wait">
+                        <h2 id="randomToPlay">Хотят играть</h2>
+                        <div class="scrollBox">
+                            {{#each wait}}
+                                <p>{{.}}</p><br/>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div id="play">
+                        <h2>Готовятся играть с Djey</h2>
+                        <div class="scrollBox">
+                            {{#each play}}
+                                <p>{{.}}</p><br/>
+                            {{/each}}
+                        </div>
+                    </div>
+                    <div id="end">
+                        <h2>Предыдущие участники</h2>
+                        <div class="scrollBox">
+                            {{#each end}}
+                                <p>{{.}}</p><br/>
+                            {{/each}}
+                        </div>
+                    </div>
+                {{/with}}
+            </div>
+        </div>
+        <br/>
+        <button onclick="$('#twitchPlayer').remove()">Удалить видео</button><br/>
+        <div id="twitchPlayer" style="{{#if mobilecheck}}display: block !important;{{/if}}">
+            <iframe allowfullscreen="true" style="margin-left: auto; margin-right: auto" frameborder="0" autoplay="false" width="{{#if mobilecheck}}90%{{else}}1000{{/if}}" height="700" src="//goodgame.ru/player2?8950"></iframe>
+            {{#if mobilecheck}}
+                <br/>
+            {{/if}}
+            <iframe height="700" src="//goodgame.ru/chat/djey2828/"></iframe>
+        </div>
+    </div>
+
+</template>

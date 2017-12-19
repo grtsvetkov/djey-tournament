@@ -27,6 +27,10 @@ Meteor.publish('challenge', function() {
     return Challenge.find({});
 });
 
+Meteor.publish('ros', function() {
+    return Ros.find({});
+});
+
 Meteor.publish('djeycoin', function() {
     return Djeycoin.find({});
 });

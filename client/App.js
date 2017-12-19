@@ -23,10 +23,17 @@ var commandSort = function () {
 };
 
 Template.AppLayout.rendered = function () {
-    $('#globalWrap').snowfall();
+
 };
 
 Template.AppLayout.helpers({
+    
+    'logo': function() {
+        if(Router.current().route.getName() == 'ros') {
+            return 'ros';
+        }
+    },
+    
     'name': function () {
         var val = Env.findOne({name: 'name'});
 
@@ -40,6 +47,11 @@ Template.AppLayout.helpers({
 
 
 Template.AppLayout.events({
+
+    'click #logo': function() {
+        Router.go('/')
+    },
+
     'click #newTour': function (e) {
         e.preventDefault();
         var diag = $(`
@@ -610,19 +622,6 @@ Template.index.events({
         diag.dialog('open');
 
         return false;
-    }
-});
-
-Template.signin.events({
-    'click #authSend': function () {
-        Meteor.call('con.setAdmin', $('#authPassword').val(), function (err) {
-            if (err) {
-                console.log(err);
-                sAlert.error(err.reason);
-            } else {
-                Router.go('/');
-            }
-        })
     }
 });
  

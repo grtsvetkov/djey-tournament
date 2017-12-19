@@ -76,6 +76,10 @@ comName = function(n) {
     return com && com.name ? com.name : '';
 };
 
+Template.registerHelper('mobilecheck', function () {
+    return mobilecheck();
+});
+
 Template.registerHelper('is_admin', function () {
     return isAdmin();
 });

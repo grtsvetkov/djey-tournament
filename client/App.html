@@ -29,11 +29,16 @@
                     {{/if}}
                 </span>
             </div>
-            <div id="banner">
+            {{#if eq logo 'ros'}}
+                <a href="/" id="vg_logo"></a>
+            {{else}}
+                <a href="/ros" id="ros_logo"></a>
+            {{/if}}
+            <!--div id="banner">
                 <a href="http://ecostroymsk.ru/?utm_campaign=from_DJEY" target="_blank">
                     <img src="/banner/468-60.png" alt="">
                 </a>
-            </div>
+            </div-->
             {{>yield}}
         </div>
         <div id="footer">
@@ -188,27 +193,28 @@
                 {{/with}}
             </div>
         </div>
-        <div class="footerBlock" >
-            <div id="twitchPlayer">
-                <button onclick="$('#twitchPlayer').remove()">Удалить видео</button>
-                <iframe allowfullscreen="true" frameborder="0" autoplay="false" width="640" height="480" src="https://goodgame.ru/player?8950"></iframe>
-                <!--iframe src="https://player.twitch.tv/?channel=djeytv&autoplay=false" frameborder="0" autoplay="false" allowfullscreen="true" scrolling="no" height="480" width="640"></iframe-->
-            </div>
-
-            <fieldset>
-                <legend>Участники прошлого турнира</legend>
-                <ul id="lastList" class="row">
-                    {{#each last_list}}
-                        <li>
-                            {{#if is_admin}}
-                            <div data-name="{{name}}" class="remove">&#8635;</div>
-                            {{/if}}
-                            {{name}} {{{levelM vg_level}}}
-                        </li>
-                    {{/each}}
-                </ul>
-            </fieldset>
+        <br/>
+        <button onclick="$('#twitchPlayer').remove()">Удалить видео</button>
+        <div id="twitchPlayer" style="{{#if mobilecheck}}display: block !important; margin-left: auto; text-align: center; margin-right: auto;{{/if}}">
+            <iframe allowfullscreen="true" style="margin-left: auto; margin-right: auto" frameborder="0" autoplay="false" width="{{#if mobilecheck}}90%{{else}}1000{{/if}}" height="700" src="//goodgame.ru/player2?8950"></iframe>
+            {{#if mobilecheck}}
+                <br/>
+            {{/if}}
+            <iframe height="700" src="//goodgame.ru/chat/djey2828/"></iframe>
         </div>
+        <fieldset>
+            <legend>Участники прошлого турнира</legend>
+            <ul id="lastList" class="row">
+                {{#each last_list}}
+                    <li>
+                        {{#if is_admin}}
+                            <div data-name="{{name}}" class="remove">&#8635;</div>
+                        {{/if}}
+                        {{name}} {{{levelM vg_level}}}
+                    </li>
+                {{/each}}
+            </ul>
+        </fieldset>
     </div>
 </template>
 
@@ -216,13 +222,4 @@
     <li data-id="{{_id}}" data-name="{{name}}" class="{{isMe}}">
         <div class="online {{#unless online}}offline{{/unless}}"></div>{{name}} {{{levelM vg_level}}}
     </li>
-</template>
-
-<template name="signin">
-    <div id="wrap">
-        <div id="mainBlock" class="row">
-            <input type="password" id="authPassword">
-            <button id="authSend">Auth</button>
-        </div>
-    </div>
 </template>
