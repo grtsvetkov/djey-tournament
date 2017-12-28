@@ -1245,7 +1245,8 @@ fieldset legend {
     border-radius: 50%;
     margin-left: auto !important;
     margin-right: auto !important;
-    margin-top: 4px !important;
+    margin-top: 17px !important;
+    z-index: 1;
 }
 
 .c100 *, .c100 *:before, .c100 *:after {
