@@ -58,4 +58,11 @@ Meteor.startup(function(){
         Draft.insert({name: 'B', val: 0});
         Draft.insert({name: 'data', val: {}});
     }
+
+    //DRAFT TIMER
+    var flag = Env.findOne({name: 'draftTime'});
+
+    if(!flag) {
+        Env.insert({name: 'draftTime', val: '0'});
+    }
 });

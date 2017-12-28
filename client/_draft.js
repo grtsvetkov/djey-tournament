@@ -119,9 +119,17 @@ Template._draft.helpers({
         return player;
     },
 
-    'isCurrent': function(step) {
+    'isCurrent': function(steps) {
+
+        steps = String(steps).split('-');
+        
+        if(steps.length == 1) {
+            steps.push('FAKE');
+        }
+        
         var data = Draft.findOne({name: 'data'});
-        return data && data.val && data.val.currentStep == step ? true : false;
+
+        return data && data.val && (data.val.currentStep == steps[0] || data.val.currentStep == steps[1]) ? true : false;
     },
     
     currentRole: function() {
@@ -280,5 +288,16 @@ Template._draft.events({
 
     'click #roleSelect .buildItem': function(e) {
         Meteor.call('draft.setBuild', e.currentTarget.dataset.build);
+    }
+});
+
+Template._draft_time.helpers({
+    time: function() {
+        var time = parseInt(Env.findOne({name: 'draftTime'}).val);
+        
+        if(time > 100) {
+            time = 100;
+        }
+        return time;
     }
 });

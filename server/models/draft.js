@@ -2,6 +2,8 @@ const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
 const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
 const playerByStep = [0, 0, 0, 0, 0, 0, 1, 1, 2, 2];
 
+var draftTimerHandler = null;
+
 var defaultDraft = {
     status: 'Open',
     currentTeam: 'A',
@@ -38,12 +40,35 @@ DraftModel = {
             Draft.update({name: 'B'}, {$set: {val: teamB}});
             Draft.update({name: 'data'}, {$set: {val: defaultDraft}});
             Env.update({name: 'status'}, { $set: {val: String('-1')} });
+
+            DraftModel._draftTimerFunction('start');
+            
         } else {
             throw new Meteor.Error(35, 'Ошибка создания драфта. Не полные команды');
             return;
         }
     },
+    
+    _draftTimerFunction: function(step) {
 
+        if(draftTimerHandler) {
+            Meteor.clearTimeout(draftTimerHandler);
+        }
+
+        let time;
+        
+        if(step == 'stop') {
+
+            time = 0;    
+        } else {
+            time = (step == 'start') ? 1: parseInt(Env.findOne({name: 'draftTime'}).val) + 1;
+
+            draftTimerHandler = Meteor.setTimeout(DraftModel._draftTimerFunction, 1000);
+        }
+
+        Env.update({name: 'draftTime'}, {$set: {val: String(time)}});
+    },
+    
     _getTeamByPlayerId: function(_id) {
         var team = Draft.findOne({'val': _id});
 
@@ -110,10 +135,12 @@ DraftModel = {
             return;
         }
 
+        
         DraftModel._pick(data, h);
     },
 
     _pick: function(data, h) {
+
         if (data.pick.indexOf(h) <= -1 && data.ban.indexOf(h) <= -1) {
 
             var action = actionByStep[data.currentStep];
@@ -126,6 +153,15 @@ DraftModel = {
             data.currentPlayer = playerByStep[data.currentStep];
 
             DraftModel._updateData(data);
+
+            if(data.currentStep == 10) {
+                DraftModel._draftTimerFunction('stop');
+            } else {
+                DraftModel._draftTimerFunction('start');
+            }
+
+            
+            
         } else {
             throw new Meteor.Error('500', 'Герой уже был выбран ранее');
         }
@@ -194,6 +230,7 @@ DraftModel = {
             return;
         }
 
+        DraftModel._draftTimerFunction('stop');
         Env.update({name: 'status'}, { $set: {val: String(0)} });
     }
 };
