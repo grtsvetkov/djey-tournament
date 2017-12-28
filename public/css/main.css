@@ -712,7 +712,7 @@ fieldset legend {
     background-color: rgba(251, 161, 108, 0.5);
 }
 
-.block-action div {
+.block-action div.forTap {
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -724,6 +724,11 @@ fieldset legend {
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
+}
+
+.block-action div.currentPlayer {
+    background: transparent;
+    background-size: cover;
 }
 
 .block-action .ban {
@@ -1232,11 +1237,11 @@ fieldset legend {
 
 .c100 {
     position: absolute !important;
-    left: 20px;
+    left: 30px;
     background: #000;
-    font-size: 100px;
-    width: 100px;
-    height: 100px;
+    font-size: 80px;
+    width: 1em;
+    height: 1em;
     border-radius: 50%;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -1287,7 +1292,7 @@ fieldset legend {
     display: block;
     content: " ";
     border-radius: 50%;
-    background-color: #000;
+    background: transparent;
     width: 0.84em;
     height: 0.84em;
     -webkit-transition-property: all;

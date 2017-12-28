@@ -63,7 +63,7 @@ DraftModel = {
         } else {
             time = (step == 'start') ? 1: parseInt(Env.findOne({name: 'draftTime'}).val) + 1;
 
-            draftTimerHandler = Meteor.setTimeout(DraftModel._draftTimerFunction, 1000);
+            draftTimerHandler = Meteor.setTimeout(DraftModel._draftTimerFunction, 600);
         }
 
         Env.update({name: 'draftTime'}, {$set: {val: String(time)}});

@@ -123,13 +123,9 @@ Template._draft.helpers({
 
         steps = String(steps).split('-');
         
-        if(steps.length == 1) {
-            steps.push('FAKE');
-        }
-        
         var data = Draft.findOne({name: 'data'});
 
-        return data && data.val && (data.val.currentStep == steps[0] || data.val.currentStep == steps[1]) ? true : false;
+        return data && data.val && steps.indexOf(String(data.val.currentStep)) > -1 ? true : false;
     },
     
     currentRole: function() {

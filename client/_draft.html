@@ -38,17 +38,18 @@
         <div class="wrap">
 
             <div class="block-action teamA">
-                <div id="action-step0" class="ban {{#if isCurrent 0}}current{{/if}}" style="{{styleStep 0}}"></div>
-                <div id="action-step2" data-team="A" data-position="0" class="pick {{#if isCurrent 2}}current{{/if}}" style="{{styleStep 2}}">
-                    {{#if isCurrent '0-2'}}{{>_draft_time}}{{/if}}
+                <div id="action-step0" class="forTap ban {{#if isCurrent 0}}current{{/if}}" style="{{styleStep 0}}"></div>
+                <div id="action-step2" data-team="A" data-position="0" class="forTap pick {{#if isCurrent 2}}current{{/if}} {{#if isCurrent '0-2-5'}}currentPlayer{{/if}}" style="{{styleStep 2}}">
+                    {{#if isCurrent '0-2-5'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'A' 0}}{{>_draft_player}}{{/with}}
                 </div>
-                <div id="action-step5" class="ban {{#if isCurrent 5}}current{{/if}}" style="{{styleStep 5}}"></div>
-                <div id="action-step7" data-team="A" data-position="1" class="pick {{#if isCurrent 7}}current{{/if}}" style="{{styleStep 7}}">
-                    {{#if isCurrent '5-7'}}{{>_draft_time}}{{/if}}
+                <div id="action-step5" class="forTap ban {{#if isCurrent 5}}current{{/if}}" style="{{styleStep 5}}"></div>
+
+                <div id="action-step7" data-team="A" data-position="1" class="forTap pick {{#if isCurrent 7}}current{{/if}} {{#if isCurrent '7'}}currentPlayer{{/if}}" style="{{styleStep 7}}">
+                    {{#if isCurrent '7'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'A' 1}}{{>_draft_player}}{{/with}}
                 </div>
-                <div id="action-step8" data-team="A" data-position="2" class="pick {{#if isCurrent 8}}current{{/if}}" style="{{styleStep 8}}">
+                <div id="action-step8" data-team="A" data-position="2" class="forTap pick {{#if isCurrent 8}}current{{/if}} {{#if isCurrent '8'}}currentPlayer{{/if}}" style="{{styleStep 8}}">
                     {{#if isCurrent '8'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'A' 2}}{{>_draft_player}}{{/with}}
                 </div>
@@ -71,17 +72,18 @@
             </div>
 
             <div class="block-action teamB">
-                <div id="action-step1" class="ban {{#if isCurrent 1}}current{{/if}}" style="{{styleStep 1}}"></div>
-                <div id="action-step3" data-team="B" data-position="0" class="pick {{#if isCurrent 3}}current{{/if}}" style="{{styleStep 3}}">
-                    {{#if isCurrent '1-3'}}{{>_draft_time}}{{/if}}
+                <div id="action-step1" class="forTap ban {{#if isCurrent 1}}current{{/if}}" style="{{styleStep 1}}"></div>
+                <div id="action-step3" data-team="B" data-position="0" class="forTap pick {{#if isCurrent 3}}current{{/if}} {{#if isCurrent '1-3-4'}}currentPlayer{{/if}}" style="{{styleStep 3}}">
+                    {{#if isCurrent '1-3-4'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'B' 0}}{{>_draft_player}}{{/with}}
                 </div>
-                <div id="action-step4" class="ban {{#if isCurrent 4}}current{{/if}}" style="{{styleStep 4}}"></div>
-                <div id="action-step6" data-team="B" data-position="1" class="pick {{#if isCurrent 6}}current{{/if}}" style="{{styleStep 6}}">
-                    {{#if isCurrent '4-6'}}{{>_draft_time}}{{/if}}
+                <div id="action-step4" class="forTap ban {{#if isCurrent 4}}current{{/if}}" style="{{styleStep 4}}"></div>
+
+                <div id="action-step6" data-team="B" data-position="1" class="forTap pick {{#if isCurrent 6}}current{{/if}} {{#if isCurrent '6'}}currentPlayer{{/if}}" style="{{styleStep 6}}">
+                    {{#if isCurrent '6'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'B' 1}}{{>_draft_player}}{{/with}}
                 </div>
-                <div id="action-step9" data-team="B" data-position="2" class="pick {{#if isCurrent 9}}current{{/if}}" style="{{styleStep 9}}">
+                <div id="action-step9" data-team="B" data-position="2" class="forTap pick {{#if isCurrent 9}}current{{/if}} {{#if isCurrent '9'}}currentPlayer{{/if}}" style="{{styleStep 9}}">
                     {{#if isCurrent '9'}}{{>_draft_time}}{{/if}}
                     {{#with playerPlace 'B' 2}}{{>_draft_player}}{{/with}}
                 </div>
@@ -93,7 +95,7 @@
 <template name="_draft_time">
     {{#with time}}
         <div class="c100 p{{.}} {{#if eq . 100}}red{{/if}}">
-            <span>{{.}}</span>
+            <span>{{.}}%</span>
             <div class="slice">
                 <div class="bar"></div>
                 <div class="fill"></div>
