@@ -1,4 +1,5 @@
 Meteor.startup(function(){
+
     var flag = Env.findOne({name: 'password'});
     
     if(!flag) {
