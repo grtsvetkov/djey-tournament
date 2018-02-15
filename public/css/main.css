@@ -626,16 +626,59 @@ fieldset legend {
     margin-right: auto;
     width: 95%;
     margin-bottom: 40px;
+    d1isplay: -webkit-flex; /* Safari */
+    d1isplay: flex;
+    j1ustify-content: space-between;
+    -w1ebkit-justify-content: space-between; /* Safari */
+}
+
+#dbd .pickLists {
     display: -webkit-flex; /* Safari */
     display: flex;
     justify-content: space-between;
     -webkit-justify-content: space-between; /* Safari */
 }
 
+#dbd .banLists {
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between; /* Safari */
+}
+
+#dbd .banList {
+    display: block;
+    height: 100px;
+}
+
+#dbd .ban {
+    width: 90px;
+    height: 90px;
+}
+
+#dbd .banList div{
+    display: inline-block;
+}
+
+#dbd .teamA div.ban, #dbd .teamA div.pick {
+    border: 1px solid #63D1F4;
+}
+
+#dbd .teamA div.ban.current, #dbd .teamA div.pick.current {
+    box-shadow: 0 0 40px 10px rgba(99, 209, 244, 0.7);
+}
+
+#dbd .teamB div.ban, #dbd .teamB div.pick {
+    border: 1px solid #FBA16C;
+}
+
+#dbd .teamB div.ban.current, #dbd .teamB div.pick.current {
+    box-shadow: 0 0 40px 10px rgba(251, 161, 108, 0.7);
+}
+
 .block-action {
     vertical-align: top;
     display: inline-block;
-
 }
 
 .block-action.teamA .playerRole {
@@ -678,6 +721,10 @@ fieldset legend {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.block-action .playerName.isMe {
+    background-color: rgba(28, 107, 223, 0.5) !important;
+}
+
 .block-action .playerName li {
     font-size: 15px;
     color: #ffffff;
@@ -688,31 +735,16 @@ fieldset legend {
     margin-top: 0;
 }
 
-.block-action.teamA div.ban, .block-action.teamA div.pick {
-    border: 1px solid #63D1F4;
-}
-
-.block-action.teamA div.ban.current, .block-action.teamA div.pick.current {
-    box-shadow: 0 0 40px 10px rgba(99, 209, 244, 0.7);
-}
 
 .block-action.teamA div.active {
     background-color: rgba(99, 209, 244, 0.5);
-}
-
-.block-action.teamB div.ban, .block-action.teamB div.pick {
-    border: 1px solid #FBA16C;
-}
-
-.block-action.teamB div.ban.current, .block-action.teamB div.pick.current {
-    box-shadow: 0 0 40px 10px rgba(251, 161, 108, 0.7);
 }
 
 .block-action.teamB div.active {
     background-color: rgba(251, 161, 108, 0.5);
 }
 
-.block-action div.forTap {
+#dbd div.forTap {
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -726,14 +758,9 @@ fieldset legend {
     -ms-user-select: none; /* IE10+ */
 }
 
-.block-action div.currentPlayer {
+#dbd div.currentPlayer {
     background: transparent;
     background-size: cover;
-}
-
-.block-action .ban {
-    width: 90px;
-    height: 90px;
 }
 
 .block-action .pick {
@@ -743,7 +770,6 @@ fieldset legend {
 }
 
 #heroesIcons {
-    display: inline-block;
     width: 60%;
     padding: 0;
     margin: 0;
@@ -753,6 +779,16 @@ fieldset legend {
     -moz-user-select: none; /* mozilla browsers */
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
+
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    justify-content: center;
+    -webkit-justify-content: center; /* Safari */
+
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap; /* Safari */
+    flex-direction: row;
+    -webkit-flex-direction: row; /* Safari */
 }
 
 #heroesIcons div {
@@ -762,6 +798,8 @@ fieldset legend {
     cursor: pointer;
     width: 130px;
     height: 130px;
+
+    margin: 3px;
 
     vertical-align: bottom;
 

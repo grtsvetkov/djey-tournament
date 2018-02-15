@@ -59,16 +59,17 @@ Template._draft.helpers({
         }
     },
 
-    'playerPlace': function(team, position) {
-        
-        let teamIds = Draft.findOne({name: team});
+    'playerPlace': function(team, position, steps) {
+
+        let _id = localStorage.getItem('myPersonalId'),
+            teamIds = Draft.findOne({name: team});
 
         if(!teamIds || !teamIds.val || !teamIds.val[position]) {
             return;
         }
         
         let player = Con.findOne({_id: teamIds.val[position]}),
-            currentTeam = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+            currentTeam = Draft.findOne({'val': _id});
         
         if(!player) {
             return;
@@ -85,7 +86,17 @@ Template._draft.helpers({
                 player.role = data.val.role[team][player._id];
             }
         }
-        
+
+        /*steps = String(steps).split('-');
+
+        let draft = Draft.findOne({name: 'data'});
+
+        player.isCurrent = draft && draft.val && steps.indexOf(String(draft.val.currentStep)) > -1 ? true : false;
+
+        console.log(player);*/
+
+        player.isMe = player._id == _id;
+
         return player;
     },
 
