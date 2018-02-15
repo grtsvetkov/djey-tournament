@@ -1,5 +1,5 @@
-const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'A', 'B'];
-const actionByStep = ['ban', 'ban', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick'];
+const teamByStep = ['A', 'B', 'A', 'B', 'B', 'A', 'B', 'A', 'B', 'A', 'A', 'B', 'A', 'B', 'A', 'B'];
+const actionByStep = ['ban', 'ban', 'pick', 'pick', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick', 'pick', 'pick', 'ban', 'ban', 'pick', 'pick'];
 
 var heroes = ['adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', 'catherine', 'celeste',
     'churnwalker', 'flicker', 'fortress', 'glaive', 'grace', 'grumpjaw', 'gwen', 'idris', 'joule', 'kestrel', 
@@ -8,56 +8,28 @@ var heroes = ['adagio', 'alpha', 'ardan', 'baptiste', 'baron', 'blackfeather', '
 
 Template._draft.helpers({
 
-    'teamList': function(team) {
-
-        var data = Draft.findOne({name: 'data'});
-
-        if (!data || !data.val ) {
-            return;
-        }
-
-        var currentTeam = data.val.currentTeam;
-        var currentPlayer = data.val.currentPlayer;
-
-        var teamIds = Draft.findOne({name: team});
-
-        if(!teamIds) {
-            return;
-        }
-
-        var list = [];
-
-        _.each(teamIds.val, function(i, key){
-            var player = Con.findOne({_id: i});
-            if(currentTeam == team && currentPlayer == key) {
-                player.isCurrent = true;
-            }
-
-            list.push(player);
-        });
-
-        return list;
-    },
-
     'heroes': function () {
 
-        var data = Draft.findOne({name: 'data'});
-        var steps = [];
+        let data = Draft.findOne({name: 'data'}),
+            steps = [];
 
         if (data && data.val && data.val.steps) {
             steps = data.val.steps;
         }
 
-        var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
+        let team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
 
         if(!team) {
+
             return _.map(heroes, function (i) {
                 return {name: i, class: steps.indexOf(i) > -1 ? 'checked' : ''};
             });
+
         } else {
+
             return _.map(heroes, function (i) {
 
-                var likes = [];
+                let likes = [];
 
                 if(data.val.like[team.name][i]) {
                     likes = _.map(data.val.like[team.name][i], function(action, name){
@@ -71,16 +43,15 @@ Template._draft.helpers({
     },
 
     'styleStep': function (n) {
-        var data = Draft.findOne({name: 'data'});
+        let data = Draft.findOne({name: 'data'}),
+            byStep = teamByStep[n] == 'A' ? {color : '#63D1F4', bk: 'blueban'} : {color : '#FBA16C', bk: 'orangeban'};
 
         if (data && data.val) {
             if (data.val.currentStep == n) {
-                var color = teamByStep[n] == 'A' ? '#63D1F4' : '#FBA16C';
-                return 'background-color: ' + color;
+                return 'background-color: ' + byStep.color;
             } else if (data.val.steps && data.val.steps[n]) {
                 if (actionByStep[n] == 'ban') {
-                    var back = teamByStep[n] == 'A' ? 'blueban' : 'orangeban';
-                    return 'background-image: url(\'/css/' + back + '.png\'), url(\'/img/' + data.val.steps[n] + '.gif\'); background-position: center, center; background-repeat: no-repeat;';
+                    return 'background-image: url(\'/css/' + byStep.bk + '.png\'), url(\'/img/' + data.val.steps[n] + '.gif\'); background-position: center, center; background-repeat: no-repeat;';
                 } else {
                     return 'background-image: url(\'/img/' + data.val.steps[n] + '.gif\');';
                 }
@@ -89,21 +60,20 @@ Template._draft.helpers({
     },
 
     'playerPlace': function(team, position) {
-        var teamIds = Draft.findOne({name: team});
+        
+        let teamIds = Draft.findOne({name: team});
 
         if(!teamIds || !teamIds.val || !teamIds.val[position]) {
             return;
         }
         
-        var player = Con.findOne({_id: teamIds.val[position]});
+        let player = Con.findOne({_id: teamIds.val[position]}),
+            currentTeam = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
         
         if(!player) {
             return;
         }
 
-
-        var currentTeam = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
-        
         if(currentTeam && currentTeam.name == team) {
             var data = Draft.findOne({name: 'data'});
 
@@ -123,29 +93,26 @@ Template._draft.helpers({
 
         steps = String(steps).split('-');
         
-        var data = Draft.findOne({name: 'data'});
+        let data = Draft.findOne({name: 'data'});
 
         return data && data.val && steps.indexOf(String(data.val.currentStep)) > -1 ? true : false;
     },
     
     currentRole: function() {
-        var _id = localStorage.getItem('myPersonalId');
-        var data = Draft.findOne({name: 'data'});
-        var team = Draft.findOne({'val': _id});
-
-
+        
+        let _id = localStorage.getItem('myPersonalId'),
+            data = Draft.findOne({name: 'data'}),
+            team = Draft.findOne({'val': _id});
 
         if(!team || !team.name || !data || !data.val) {
             return;
         }
         
-        return !data.val.role[team.name][_id] ? {role: '', build: ''} : data.val.role[team.name][_id]
+        return !data.val.role[team.name][_id] ? {role: '', build: ''} : data.val.role[team.name][_id];
     }
 });
 
 var selectHeroes = function(h) {
-    var data = Draft.findOne({name: 'data'});
-    var team = Draft.findOne({'val': localStorage.getItem('myPersonalId')});
 
     if(isAdmin()) {
         var diag = $('<div id="myDialog" title="Выполнить драфт за игрока?">Вы хотите выбрать '+h+ ' за игрока?/div>');
@@ -173,13 +140,17 @@ var selectHeroes = function(h) {
 
         return false;
     }
+
+    let _id = localStorage.getItem('myPersonalId'),
+        data = Draft.findOne({name: 'data'}),
+        team = Draft.findOne({'val': _id});
     
     if(!team) {
         sAlert.error('Ошибка авторизации!');
         return;
     }
 
-    if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(localStorage.getItem('myPersonalId')) == data.val.currentPlayer) {
+    if (data && data.val && data.val.currentTeam == team.name && team.val.indexOf(_id) == data.val.currentPlayer) {
         if (data.val.steps && data.val.steps.indexOf(h) <= -1) {
             Meteor.call('draft.step', h, function (err) {
                 if (err) {
@@ -204,10 +175,9 @@ Template._draft.events({
 
         e.preventDefault();
 
-        var team = e.currentTarget.dataset.team;
-        var position = parseInt(e.currentTarget.dataset.position);
-
-        var teamIds = Draft.findOne({name: team});
+        let team = e.currentTarget.dataset.team,
+            teamIds = Draft.findOne({name: team}),
+            position = parseInt(e.currentTarget.dataset.position);
 
         if(!team || !teamIds || !teamIds.val || !teamIds.val[position]) {
             return;
@@ -225,25 +195,21 @@ Template._draft.events({
     },
 
     'click .likeSelector img, touchend .likeSelector img': function(e) {
-
-        preSelectHero = false;
         e.preventDefault();
 
-        var _myId = localStorage.getItem('myPersonalId');
+        preSelectHero = false;
 
-        if(!_myId) {
-            return;
-        }
+        let h = e.currentTarget.dataset.name,
+            a = e.currentTarget.dataset.action,
+            _id = localStorage.getItem('myPersonalId'),
+            team = Draft.findOne({'val': _id});
 
-        var h = e.currentTarget.dataset.name;
-        var a = e.currentTarget.dataset.action;
-        var team = Draft.findOne({'val': _myId});
-
-        if(!team) {
+        if(!_id || !team) {
             return;
         }
 
         Meteor.call('draft.setLike', h, a);
+        
         $('.likeSelector').addClass('hidden');
 
         return false;
@@ -252,12 +218,13 @@ Template._draft.events({
     'touchend #heroesIcons .heroSelector, click #heroesIcons .heroSelector': function(e) { //NO ZOOM
         e.preventDefault();
 
-        var hero = e.currentTarget.dataset.name;
+        let hero = e.currentTarget.dataset.name;
 
         if(dblClickDetector && hero == preSelectHero) {
             $('.likeSelector').addClass('hidden');
             selectHeroes(hero);
             dblClickDetector = false;
+
         } else {
 
             preSelectHero = hero;
@@ -271,9 +238,7 @@ Template._draft.events({
                 $(e.currentTarget).find('.likeSelector').removeClass('hidden');
             }
 
-            Meteor.setTimeout(function() {
-                dblClickDetector = false;
-            }, 666);
+            Meteor.setTimeout(function() { dblClickDetector = false; }, 666);
         }
         return false;
     },
@@ -289,11 +254,9 @@ Template._draft.events({
 
 Template._draft_time.helpers({
     time: function() {
-        var time = parseInt(Env.findOne({name: 'draftTime'}).val);
         
-        if(time > 100) {
-            time = 100;
-        }
-        return time;
+        let time = parseInt(Env.findOne({name: 'draftTime'}).val);
+        
+        return time > 100 ? 100 : time;
     }
 });

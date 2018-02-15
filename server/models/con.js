@@ -153,10 +153,10 @@ ConModel = {
             return;
         }
 
-        var flag = Con.find({command: command}).count();
+        var flag = Con.find({command: parseInt(command)}).count();
 
-        if (flag > 3 && command > 0) {
-            throw new Meteor.Error(2, 'В команде может быть не больше трёх игроков');
+        if (flag > 4 && command > 0) {
+            throw new Meteor.Error(2, 'В команде может быть не больше пяти игроков');
             return;
         }
 
@@ -174,10 +174,10 @@ ConModel = {
             return;
         }
 
-        var flag = Con.find({command: command}).count();
+        var flag = Con.find({command: parseInt(command)}).count();
 
-        if (flag > 3 && command > 0) {
-            throw new Meteor.Error(2, 'В команде может быть не больше трёх игроков');
+        if (flag > 4 && command > 0) {
+            throw new Meteor.Error(2, 'В команде может быть не больше пяти игроков');
             return;
         }
 
@@ -192,8 +192,6 @@ ConModel = {
             minrang_array.push(i+'-1');
             minrang_array.push(i+'-2');
         }
-        
-        console.log(minrang_array);
         
         var list = Con.find({name: {$exists: true}, command: {$eq: 0}, vg_level: { $in: minrang_array}, online: true}).fetch();
 
